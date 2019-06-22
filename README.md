@@ -1,18 +1,18 @@
-this is a test for c
+<h1>`GCC` Introduction</h1>
 # 1. cmd
 ```
 gcc main.c -o main      # comile and link source file in one step, output a executable bin file
 gcc -c main.c           # produce object file from source, default file name is main.o, you can use -o get a customized name
 gcc main.o              # link a object file to produce a execute bin file
 ```
-# 2. gcc
+# 2. `GCC` pipeline
 gcc process step
 - precompile source file -> precompiled file
 - precompiled file -> assembly file
 - assembly file -> object file
 - link object file -> executable file
 
-# 3. gcc options
+# 3. `GCC` options
 
 GCC 选项区分大小写
 
@@ -26,7 +26,7 @@ GCC 选项区分大小写
 | -g | 生成调试信息，该程序可以被调试器调试 |
 | -save-temps | GCC 会正常地编译和链接，但是会把预处理器输出、汇编语言和对象文件全部存储在当前目录下 (.i 预处理文件, .s 汇编源文件,.o 目标文件)|
 
-# 4. gcc 预处理选项
+# 4. `GCC` 预处理选项
 
 - `-E -C`   
   头文件较大或源文件包括了多个头文件时，预处理器输出可能会庞杂难读。使用-C选项可删除源文件和头文件中的注释   
@@ -47,7 +47,7 @@ GCC 选项区分大小写
 所有在`-I-`右边加上`-I`选项的目录，将对所有`#include`命令中的头文件名进行搜索，无论文件名是在引号还是尖括号中。  
 而且，如果命令行中出现了`-I-`，那么包括源文件本身的目录不再自动作为搜索头文件的目录
 
-# 5. include  
+# 5. Include Header  
 
 对于include目录而言，通常的搜索顺序是：  
 (1) 包含指定源文件的目录（对于在 #include 命令中以引号包括的文件名）。  
@@ -57,7 +57,7 @@ GCC 选项区分大小写
 (5) 采用-isystem选项指定的目录，依照出现在命令行中的顺序进行搜索。  
 (6) 采用环境变量 C_INCLUDE_PATH 指定的目录。  
 (7) 系统默认的 include 目录  
-# 6. gcc -S
+# 6. `GCC` -S
 - 编译器的核心任务是把C程序翻译成机器的汇编语言（`assembly language`）。汇编语言是人类可以阅读的编程语言，也是相当接近实际机器码的语言。由此导致每种 `CPU` 架构都有不同的汇编语言。  
 - 实际上，`GCC` 是一个适合多种 `CPU` 架构的编译器，不会把C程序语句直接翻译成目标机器的汇编语言，而是在输入语言和输出汇编语言之间，利用一个中间语言，称为 `RegisterTransfer Language`（简称 `RTL`，寄存器传输语言）。借助于这个抽象层，在任何背景下，编译器可以选择最经济的方式对给定的操作编码。
 - 在交互文件中针对目标机器的抽象描述，为编译器重新定向到新架构提供了一个结构化的方式。但是，从 `GCC` 用户角度来看，我们可以忽略这个中间步骤。
@@ -71,7 +71,7 @@ $ gcc -S circle.c
 ```
 $ gcc -S -fverbose-asm circle.c
 ```
-# 7. gcc -l
+# 7. `GCC` -l
 ## 7.1 链接器  
 - 链接器把多个二进制的目标文件（`object file`）链接成一个单独的可执行文件。在链接过程中，它必须把符号（变量名、函数名等一些列标识符）用对应的数据的内存地址（变量地址、函数地址等）替代，以完成程序中多个模块的外部引用。
 - 链接器也必须将程序中所用到的所有`C`标准库函数加入其中。对于链接器而言，链接库不过是一个具有许多目标文件的集合，它们在一个文件中以方便处理。
@@ -156,4 +156,7 @@ $ gcc main.c libfunc.so -o app.out
 当然，必须要确保程序在运行时可以找到这个动态链接库。  
 你可以将链接库放到标准目录下，例如 /usr/lib，  
 或者设置一个合适的环境变量，例如 LIBRARY_PATH。  
-不同系统，具有不同的加载链接库的方法
+不同系统，具有不同的加载链接库的方法,还可以这样加载
+```
+$gcc main.c -L. -lfunc -o app.out
+```
