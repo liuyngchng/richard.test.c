@@ -1,4 +1,5 @@
 <h1>`GCC` Introduction</h1>
+
 # 1. cmd
 ```
 gcc main.c -o main      # comile and link source file in one step, output a executable bin file
