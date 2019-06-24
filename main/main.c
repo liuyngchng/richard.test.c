@@ -2,6 +2,7 @@
 #include<math.h>
 #include<string.h>
 void say(int test1, int test2);
+void say_hello(int m, int n);
 int main()
 {
     long int i,x,y;
@@ -16,7 +17,7 @@ int main()
     }
     int a=10;
     char *b="this is a test";
-    say(10, 20);
+    say(11, 20);
     printf("done,%s\r\n", b);
 }
 
@@ -25,4 +26,10 @@ void say(int test1, int test2)
     int a=11;
     char *b="this is another test";
     printf("hello, this is me,%d!\r\n", test1);
+    say_hello(a, test2);
 }
+void say_hello(int m, int n)
+{
+    printf("hello, world, %d, %d\r\n", m, n);
+}
+
