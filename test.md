@@ -119,9 +119,11 @@ b=SQUARE(a++);
 ## 19. 编写strcpy函数   
 
 已知strcpy函数的原型是   
+
 ````
  char *strcpy(char *strDest, const char *strSrc);
 ```
+
 其中strDest是目的字符串，strSrc 是源字符串。   
 （1）不调用C++/C 的字符串库函数，请编写函数strcpy 。   
 （2）strcpy 能把 strSrc 的内容复制到strDest，为什么还要char * 类型的返回值？   
