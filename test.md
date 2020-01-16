@@ -120,7 +120,7 @@ b=SQUARE(a++);
 
 已知strcpy函数的原型是   
 
-````
+```
  char *strcpy(char *strDest, const char *strSrc);
 ```
 
