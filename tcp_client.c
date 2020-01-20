@@ -8,7 +8,7 @@
 #include<arpa/inet.h>
 
 #define SERVER_PORT 9999
-#define SERVER_IP "192.168.2.103"
+#define SERVER_IP "127.0.0.1"
 
 int main(int argc, char *argv[])
 {

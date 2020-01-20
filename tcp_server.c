@@ -14,6 +14,7 @@
 #include<string.h>
 #define _PORT_ 9999
 #define _BACKLOG_ 10
+const char *inet_ntop(int af, const void *src,char *dst, socklen_t size);
 int main()
 {
     int sock = socket(AF_INET, SOCK_STREAM,0);
