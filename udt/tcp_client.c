@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     char *ip = argv[1];
     int port = atoi(argv[2]);
     printf("client will connect to server %s:%d\n", ip, port);
-    char buf[1024];
-    memset(buf,0,sizeof(buf));
+    char buf[]="hello,this is a test";
+   // memset(buf,0,sizeof(buf));
     struct sockaddr_in server_sock;
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0)
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     int ret = connect(sock, (struct sockaddr*)& server_sock, sizeof(server_sock));
     if (ret < 0)
     {
-        printf("connect error, errno is %d, errstring is %s\n", errno, strerror(errno));
+        printf("connect to %s:%d error, errno is %d, errstring is %s\n", ip, port, errno, strerror(errno));
         return 1;
     }
     printf("connect to %s:%d sucess\n",ip,port);

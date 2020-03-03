@@ -6,13 +6,13 @@ gcc -g main.c -o main
 
 # 2. start debug
 ```
-gdb main  # start debug executable main
-break function # set break point for a function
-run main  # start run executable main
-info locals   # view local variables
+gdb main        # start debug executable main
+break function  # set break point for a function
+run main        # start run executable main
+info locals     # view local variables
 p variable_name # print a variable value
+set args        # input console arguments for main(int argc ,char *[]args)
 ```
-
 control
 ```
 c    # run to next break point
