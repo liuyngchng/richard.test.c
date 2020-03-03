@@ -71,7 +71,8 @@ $ gcc -S circle.c
 如果想把 C 语言变量的名称作为汇编语言语句中的注释，可以加上`-fverbose-asm`选项：
 ```
 $ gcc -S -fverbose-asm circle.c
-```
+```  
+
 # 7. `GCC` -l
 ## 7.1 链接器  
 - 链接器把多个二进制的目标文件（`object file`）链接成一个单独的可执行文件。在链接过程中，它必须把符号（变量名、函数名等一些列标识符）用对应的数据的内存地址（变量地址、函数地址等）替代，以完成程序中多个模块的外部引用。
@@ -79,6 +80,7 @@ $ gcc -S -fverbose-asm circle.c
 - 当把程序链接到一个链接库时，只会链接程序所用到的函数的目标文件。在已编译的目标文件之外，如果创建自己的链接库，可以使用 ar 命令。
 - 标准库的大部分函数通常放在文件 libc.a 中（文件名后缀.a代表“archive”），或者放在用于共享的动态链接文件 libc.so 中（文件名后缀.so代表“share object”，译为“共享对象”）。这些链接库一般位于 /lib/ 或 /usr/lib/，或者位于 GCC 默认搜索的其他目录。
 - 当使用 `GCC` 编译和链接程序时，`GCC` 默认会链接 libc.a 或者 libc.so，但是对于其他的库（例如非标准库、第三方库等），就需要手动添加。
+
 ## 7.2 demo
 `GCC` 的`-l`选项可以让我们手动添加链接库。下面我们编写一个数学程序 main.c，并使用到了 cos() 函数，它位于 <math.h> 头文件
 ```
@@ -149,18 +151,22 @@ $ gcc -shared func.o -o libfunc.so
 ```
 `-fPIC` 选项作用于编译阶段，在生成目标文件时就得使用该选项，以生成位置无关的代码  
 
-## 8.2 Use `.so` File  
+## 8.2 Compile with `.so` file  
 如果希望将一个动态链接库链接到可执行文件，那么需要在命令行中列出动态链接库的名称，具体方式和普通的源文件、目标文件一样  
 ```
 $ gcc main.c libfunc.so -o app.out
 ```
-当然，必须要确保程序在运行时可以找到这个动态链接库。  
-你可以将链接库放到标准目录下，例如 /usr/lib，  
-或者设置一个合适的环境变量，例如 LIBRARY_PATH。  
-不同系统，具有不同的加载链接库的方法,还可以这样加载  
+还可以这样加载  
 ```
 $gcc main.c -L. -lfunc -o app.out
 ```
+## 8.3 Run with `.so` file
+编译完之后，必须要确保程序在运行时可以找到这个动态链接库，可以采用以下几种方法中的一种   
+* 你可以将链接库放到标准目录下，例如 /usr/lib   
+*  设置一个合适的环境变量，例如 LIBRARY_PATH。  
+* 不同系统，具有不同的加载链接库的方法, ubuntu系统可以通过修改配置文件`sudo vim /etc/ld.so.conf`, 将.so 文件的路经添加进去,  
+然后执行 `sudo /sbin/ldconfig` 使系统配置生效
+
 # 9. cross-compilation(交叉编译)
 交叉编译，相对于原生编译(native compilation)来说，是指在某个主机平台上（比如x86上）用交叉编译器编译出可在其他平台上（比如ARM上）运行的代码的过程。
 To cross-compile is to build on one platform a binary that will run on another platform. When speaking of cross-compilation, it is important to distinguish between the build platform on which the compilation is performed, and the host platform on which the resulting executable is expected to run. The following configure options are used to specify each of them
