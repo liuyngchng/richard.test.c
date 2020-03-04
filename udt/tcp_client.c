@@ -36,17 +36,22 @@ int main(int argc, char *argv[])
         printf("connect to %s:%d error, errno is %d, errstring is %s\n", ip, port, errno, strerror(errno));
         return 1;
     }
-    printf("connect to %s:%d sucess\n",ip,port);
+    printf("connected to %s:%d\n",ip,port);
+    //buf[strlen(buf)-1]='\0';
     while(1)
-    {
-        buf[strlen(buf)-1] = '\0';
+    {   
+        printf("send msg: %s\n", buf);
         write(sock, buf, sizeof(buf));
+        break;
+        sleep(1);
         if (strncasecmp(buf,"quit", 4) == 0)
         {
             printf("quit !\n");
             break;
         }
     }
+    printf("close connection.");
     close(sock);
+    printf("exit");
     return 0;
 }

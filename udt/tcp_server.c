@@ -22,7 +22,7 @@ int main()
     int sockfd = socket(AF_INET, SOCK_STREAM,0);
     if (sockfd < 0)
     {
-        printf("socket error, errno is %d, errstring is %s\n", errno, strerror(errno));
+        printf("[%s] socket error, errno is %d, errstring is %s\n", get_time(), errno, strerror(errno));
     }
     struct sockaddr_in server_sock;
     struct sockaddr_in client_sock;
@@ -32,13 +32,13 @@ int main()
     server_sock.sin_port = htons(_PORT_);
     if (bind(sockfd, (struct sockaddr*)&server_sock, sizeof(struct sockaddr_in))< 0)
     {
-        printf("bind error, errno is %d, errstring is %s\n", errno, strerror(errno));
+        printf("[%s] bind error, errno is %d, errstring is %s\n", get_time(), errno, strerror(errno));
         close(sockfd);
         return 1;
     }
     if (listen(sockfd, _BACKLOG_)< 0)
     {
-        printf("listen error, errno is %d, errstring is %s\n", errno, strerror(errno));
+        printf("[%s] listen error, errno is %d, errstring is %s\n", get_time(), errno, strerror(errno));
         close(sockfd);
         return 2;
     }
@@ -49,21 +49,30 @@ int main()
         int client_socket = accept(sockfd, (struct sockaddr*)&client_sock,&len);
         if (client_socket < 0)
         {
-            printf("accept  error, errno is %d, errstring is %s\n", errno, strerror(errno));
+            printf("[%s] accept  error, errno is %d, errstring is %s\n", get_time(), errno, strerror(errno));
             close(sockfd);
             return 3;
         }
         char buf_ip[INET_ADDRSTRLEN];
         memset(buf_ip, 0, sizeof(buf_ip));
         inet_ntop(AF_INET, &client_sock.sin_addr, buf_ip, sizeof(buf_ip));
-        printf("get connection :ip is  %s, port is %d\n ",buf_ip, ntohs(client_sock.sin_port) );
+        printf("[%s] get connection :ip is  %s, port is %d\n", get_time(), buf_ip, ntohs(client_sock.sin_port) );
         while (1)
         {
             char buf[1024];
             memset(buf, 0, sizeof(buf));
             read(client_socket, buf, sizeof(buf));
-            printf("rcv from  %s # : %s\n", buf_ip, buf);
+            if (strlen(buf)==0)
+            {
+                printf("[%s] rec finished.\n", get_time());
+                break;
+            }
+            else
+            {
+                printf("[%s] rcv from  %s # : %s\n", get_time(), buf_ip, buf);
+            }
         }
+        fflush(stdout);
     }
     close(sockfd);
     return 0;
