@@ -164,6 +164,9 @@ $gcc main.c -L. -lfunc -o app.out
 编译完之后，必须要确保程序在运行时可以找到这个动态链接库，可以采用以下几种方法中的一种   
 * 你可以将链接库放到标准目录下，例如 /usr/lib   
 *  设置一个合适的环境变量，例如 LIBRARY_PATH。  
+```
+export LIBRARY_PATH='xxxx'
+```
 * 不同系统，具有不同的加载链接库的方法, ubuntu 和 centos下，  
   执行 `sudo vim /etc/ld.so.conf`,  或者  
   ```
@@ -171,6 +174,19 @@ $gcc main.c -L. -lfunc -o app.out
   sudo vim customized.conf
   ```
   将.so 文件的路经添加进去,然后执行 `sudo /sbin/ldconfig` 使系统配置生效
+
+* 使用 ldconfig  
+ ldconfig creates the necessary links and cache to the most recent   
+shared libraries found in the directories specified on the command   
+line, in the file /etc/ld.so.conf, and in the trusted directories   
+(/lib and /usr/lib).
+```
+ldconfig
+```
+* 设置 LD_LIBRARY_PATH
+```
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/
+```  
 
 # 9. cross-compilation(交叉编译)
 交叉编译，相对于原生编译(native compilation)来说，是指在某个主机平台上（比如x86上）用交叉编译器编译出可在其他平台上（比如ARM上）运行的代码的过程。
