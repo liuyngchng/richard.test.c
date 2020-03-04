@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include "time.h"
+#define _BUF_SIZE_ 8096
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
     int port = atoi(argv[2]);
     printf("client will connect to server %s:%d\n", ip, port);
     char buf_init[]="hello,this is a test";
-    char buf[8096];
+    char buf[_BUF_SIZE_];
     for(int i=0;i<sizeof(buf);i++)
     {
         buf[i]=buf_init[i%strlen(buf_init)];

@@ -6,16 +6,17 @@
   > Created Time: Tue 02 Mar 2020 05:15:29 PM CST
  ************************************************************************/
 
-#include<stdio.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<errno.h>
-#include<sys/types.h>
-#include<unistd.h>
-#include<string.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
 #include "time.h"
 #define _PORT_ 9999
 #define _BACKLOG_ 10
+#define _BUF_SIZE_ 8096
 const char *inet_ntop(int af, const void *src,char *dst, socklen_t size);
 int main()
 {
@@ -59,7 +60,7 @@ int main()
         printf("[%s] get connection :ip is  %s, port is %d\n", get_time(), buf_ip, ntohs(client_sock.sin_port) );
         while (1)
         {
-            char buf[1024];
+            char buf[_BUF_SIZE_];
             memset(buf, 0, sizeof(buf));
             //read(cfd, buf, sizeof(buf));
             recv(cfd, buf, sizeof(buf), 0);
