@@ -1,12 +1,13 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<unistd.h>
-#include<string.h>
-#include<errno.h>
-#include<arpa/inet.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+#include <arpa/inet.h>
+#include "time.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,19 +19,25 @@ int main(int argc, char *argv[])
     char *ip = argv[1];
     int port = atoi(argv[2]);
     printf("client will connect to server %s:%d\n", ip, port);
-    char buf[]="hello,this is a test";
+    char buf_init[]="hello,this is a test";
+    char buf[8096];
+    for(int i=0;i<sizeof(buf);i++)
+    {
+        buf[i]=buf_init[i%strlen(buf_init)];
+    }
    // memset(buf,0,sizeof(buf));
-    struct sockaddr_in server_sock;
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0)
+    struct sockaddr_in client_sock;
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
     {
         printf("socket error, errno is %d, errstring is %s\n", errno, strerror(errno));
     }
-    bzero(&server_sock, sizeof(server_sock));
-    server_sock.sin_family = AF_INET;
-    inet_pton(AF_INET, ip, &server_sock.sin_addr);
-    server_sock.sin_port = htons(port);
-    int ret = connect(sock, (struct sockaddr*)& server_sock, sizeof(server_sock));
+    bzero(&client_sock, sizeof(client_sock));
+    client_sock.sin_family = AF_INET;
+    inet_pton(AF_INET, ip, &client_sock.sin_addr);
+    client_sock.sin_port = htons(port);
+    client_sock.sin_addr.s_addr = inet_addr("127.0.0.1");
+    int ret = connect(sockfd, (struct sockaddr*)& client_sock, sizeof(client_sock));
     if (ret < 0)
     {
         printf("connect to %s:%d error, errno is %d, errstring is %s\n", ip, port, errno, strerror(errno));
@@ -38,12 +45,14 @@ int main(int argc, char *argv[])
     }
     printf("connected to %s:%d\n",ip,port);
     //buf[strlen(buf)-1]='\0';
+    long long count = 0L;
     while(1)
     {   
-        printf("send msg: %s\n", buf);
-        write(sock, buf, sizeof(buf));
-        break;
-        sleep(1);
+        printf("[%s] %lld send msg: %lu\n", get_time(), ++count, strlen(buf));
+        //write(sockfd, buf, strlen(buf));
+       send(sockfd, buf, strlen(buf), 0);
+       // break;
+        //sleep(1);
         if (strncasecmp(buf,"quit", 4) == 0)
         {
             printf("quit !\n");
@@ -51,7 +60,7 @@ int main(int argc, char *argv[])
         }
     }
     printf("close connection.");
-    close(sock);
+    close(sockfd);
     printf("exit");
     return 0;
 }

@@ -1,8 +1,8 @@
 /*************************************************************************
- gcc tcp_server.c libtime.so -o tcp_server   
-  > File Name: tcp_server.c
-  > Author: richard
-  > Mail: liuyngchng@hotmail.com
+  > cmd:        gcc tcp_server.c libtime.so -o tcp_server   
+  > File Name:  tcp_server.c
+  > Author:     richard
+  > Mail:       liuyngchng@hotmail.com
   > Created Time: Tue 02 Mar 2020 05:15:29 PM CST
  ************************************************************************/
 
@@ -46,8 +46,8 @@ int main()
     while (1)
     {
         socklen_t len = 0;
-        int client_socket = accept(sockfd, (struct sockaddr*)&client_sock,&len);
-        if (client_socket < 0)
+        int cfd = accept(sockfd, (struct sockaddr*)&client_sock,&len);
+        if (cfd < 0)
         {
             printf("[%s] accept  error, errno is %d, errstring is %s\n", get_time(), errno, strerror(errno));
             close(sockfd);
@@ -61,7 +61,8 @@ int main()
         {
             char buf[1024];
             memset(buf, 0, sizeof(buf));
-            read(client_socket, buf, sizeof(buf));
+            //read(cfd, buf, sizeof(buf));
+            recv(cfd, buf, sizeof(buf), 0);
             if (strlen(buf)==0)
             {
                 printf("[%s] rec finished.\n", get_time());
@@ -69,10 +70,10 @@ int main()
             }
             else
             {
-                printf("[%s] rcv from  %s # : %s\n", get_time(), buf_ip, buf);
+                printf("[%s] rcv from  %s # : %lu\n", get_time(), buf_ip, strlen(buf));
             }
         }
-        fflush(stdout);
+        //fflush(stdout);
     }
     close(sockfd);
     return 0;
