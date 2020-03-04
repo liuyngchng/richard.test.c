@@ -173,16 +173,11 @@ export LIBRARY_PATH='xxxx'
   cd /etc/ld.so.conf.d
   sudo vim customized.conf
   ```
-  将.so 文件的路经添加进去,然后执行 `sudo /sbin/ldconfig` 使系统配置生效
-
-* 使用 ldconfig  
+  将.so 文件的路经添加进去,然后执行 `sudo /sbin/ldconfig` 使系统配置生效  
  ldconfig creates the necessary links and cache to the most recent   
 shared libraries found in the directories specified on the command   
 line, in the file /etc/ld.so.conf, and in the trusted directories   
-(/lib and /usr/lib).
-```
-ldconfig
-```
+(/lib and /usr/lib).  
 * 设置 LD_LIBRARY_PATH
 ```
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/
