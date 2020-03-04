@@ -1,8 +1,9 @@
 /*************************************************************************
-    > File Name: tcp_server.c
-    > Author: richard
-    > Mail: liuyngchng@hotmail.com
-    > Created Time: Tue 02 Mar 2020 05:15:29 PM CST
+ gcc tcp_server.c libtime.so -o tcp_server   
+  > File Name: tcp_server.c
+  > Author: richard
+  > Mail: liuyngchng@hotmail.com
+  > Created Time: Tue 02 Mar 2020 05:15:29 PM CST
  ************************************************************************/
 
 #include<stdio.h>
@@ -41,7 +42,7 @@ int main()
         close(sockfd);
         return 2;
     }
-    printf("%s\tbind and listen port:%d success, waiting accept...\n", get_time(), _PORT_);
+    printf("[%s] bind and listen port:%d success, waiting accept...\n", get_time(), _PORT_);
     while (1)
     {
         socklen_t len = 0;
