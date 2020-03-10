@@ -1,6 +1,10 @@
+/**
+ ** g++ -o udt_client udt_client.cpp  /home/rd/so/libudt.so -lpthread
+ **/
 #include <iostream>
 #include "udt.h"
 #include <arpa/inet.h>
+#include <string.h>
 
 using namespace std;
 using namespace UDT;
@@ -22,7 +26,7 @@ int main()
         return 0;
     }
 
-    char* hello = "hello world!\n";
+    const char* hello = "hello world!\n";
     if (UDT::ERROR == UDT::send(client, hello, strlen(hello) + 1, 0))
     {
         cout << "send: " << UDT::getlasterror().getErrorMessage();

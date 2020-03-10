@@ -1,6 +1,10 @@
+/**
+ ** g++ -o udt_server udt_server.cpp /home/rd/so/libudt.so -lpthread
+ **/
 #include <arpa/inet.h>
 #include "udt.h"
 #include <iostream>
+#include <string.h>
 
 using namespace std;
 
