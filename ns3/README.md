@@ -5,6 +5,10 @@
 
 ```
 apt-get install gcc g++ python python3 python3-dev
+apt-get install python3-setuptools git mercurial
+apt-get install qt5-default mercurial
+apt-get install python-pygraphviz python-kiwi python-pygoocanvas libgoocanvas-dev ipython
+apt-get install gir1.2-goocanvas-2.0 python-gi python-gi-cairo python-pygraphviz python3-gi python3-gi-cairo python3-pygraphviz gir1.2-gtk-3.0 ipython ipython3
 apt-get install autoconf cvs bzr unrar
 apt-get install gdb valgrind
 apt-get install uncrustify
@@ -17,6 +21,7 @@ apt-get install sqlite sqlite3 libsqlite3-dev
 apt-get install libxml2 libxml2-dev
 apt-get install cmake libc6-dev libc6-dev-i386 libclang-6.0-dev llvm-6.0-dev automake python-pip
  python3 -m pip install --user cxxfilt
+apt-get install libgtk2.0-0 libgtk2.0-dev
 apt-get install vtun lxc uml-utilities
 apt-get install libboost-signals-dev libboost-filesystem-dev
 ```
