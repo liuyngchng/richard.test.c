@@ -1,5 +1,5 @@
 /**
- ** g++ -o udt_client udt_client.cc  /home/rd/so/libudt.so -lpthread
+  g++ -o _udt_client udt_client.cc  /home/rd/so/libudt.so -lpthread
  **/
 #include <iostream>
 #include "udt.h"
