@@ -1,10 +1,11 @@
-/*************************************************************************
-  > cmd:        gcc tcp_server.c libtime.so -o tcp_server   
+/*********************************************************
+   gcc -o _tcp_server tcp_server.c libtime.so
+      * runtime need to ldconfig let so file can be load.
   > File Name:  tcp_server.c
   > Author:     richard
   > Mail:       liuyngchng@hotmail.com
   > Created Time: Tue 02 Mar 2020 05:15:29 PM CST
- ************************************************************************/
+ *********************************************************/
 
 #include <stdio.h>
 #include <sys/socket.h>

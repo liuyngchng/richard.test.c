@@ -1,3 +1,9 @@
+/**
+   gcc -o _tcp_client tcp_client.c libtime.so
+   runtime need to ldconfig let so file can be load.
+  ./_tcp_client localhost 9999 > test.log &&  2>&1
+  sudo iftop -i lo  
+  */
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

@@ -182,6 +182,11 @@ line, in the file /etc/ld.so.conf, and in the trusted directories
 ```
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/
 ```  
+## 8.4 check shared objects (shared libraries) dependency
+
+```
+ldd execuable file
+```
 
 # 9. cross-compilation(交叉编译)
 交叉编译，相对于原生编译(native compilation)来说，是指在某个主机平台上（比如x86上）用交叉编译器编译出可在其他平台上（比如ARM上）运行的代码的过程。
