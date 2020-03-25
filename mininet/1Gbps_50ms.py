@@ -18,16 +18,17 @@ def myNetwork():
 
     info( '*** Adding controller\n' )
     info( '*** Add switches\n')
-    s1 = net.addSwitch('s1', cls=OVSKernelSwitch)
+    s1 = net.addSwitch('s1', cls=OVSKernelSwitch, failMode='standalone')
 
     info( '*** Add hosts\n')
     h1 = net.addHost('h1', cls=Host, ip='10.0.0.1', defaultRoute=None)
     h2 = net.addHost('h2', cls=Host, ip='10.0.0.2', defaultRoute=None)
 
     info( '*** Add links\n')
-    h1s1 = {'bw':1000,'delay':'500'}
+    h1s1 = {'bw':1000,'delay':'25ms'}
     net.addLink(h1, s1, cls=TCLink , **h1s1)
-    net.addLink(h2, s1)
+    h2s1 = {'bw':1000,'delay':'25ms'}
+    net.addLink(h2, s1, cls=TCLink , **h2s1)
 
     info( '*** Starting network\n')
     net.build()
