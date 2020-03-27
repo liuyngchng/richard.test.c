@@ -61,3 +61,15 @@ cd /build/examples
 ```
 but you must configure some dynamic library path in enviroment variables $LD_LIBRARY_PATH correctly.
 
+## 2.4 config environment variables for c program in ns3
+
+```
+# add dynamic link library path for ns3
+NS3=/home/rd/workspace/ns/ns-3.30.1
+export LD_LIBRARY_PATH=${NS3}/build:${NS3}/build/lib:$LD_LIBRARY_PATH
+# add include header file path for gcc
+export CPLUS_INCLUDE_PATH=${NS3}/build:$CPLUS_INCLUDE_PATH
+export C_INCLUDE_PATH=$CPLUS_INCLUDE_PATH
+```
+
+
