@@ -26,11 +26,38 @@ apt-get install vtun lxc uml-utilities
 apt-get install libboost-signals-dev libboost-filesystem-dev
 ```
 
-## 2.2 setup ns3 from tar ball
+## 2.2 compile ns3 from tar ball
 
 ```
 tar -jxf ns-allinone-3.30.1.tar.bz2
 cd ns-allinone-3.30.1
-python3 build.py
+ cd ns-3.30.1
+./waf clean         // clean previously build file in dir ./build 
+./waf configure --build-profile=debug --enable-sudo --enable-examples --enable-tests --disable-werror
+./waf --help        // get other configure options
+./waf               // start build , build to dir ./build
+./waf configure  --prefix=/opt/local  // this will let build file be installed to here when use cmd ./waf install 
+
+```
+test ns-3 distribution
+```
+./test.py
 ```
 ## 2.3 Configuration with Waf
+
+```
+./waf configure 
+```
+
+## 2.4 running a script
+
+```
+./waf --run hello-simulator
+```
+this is equal to execute 
+```
+cd /build/examples
+./hello-simulator
+```
+but you must configure some dynamic library path in enviroment variables $LD_LIBRARY_PATH correctly.
+
