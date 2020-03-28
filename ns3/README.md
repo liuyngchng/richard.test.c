@@ -72,4 +72,9 @@ export CPLUS_INCLUDE_PATH=${NS3}/build:$CPLUS_INCLUDE_PATH
 export C_INCLUDE_PATH=$CPLUS_INCLUDE_PATH
 ```
 
+## 2.5 gcc
 
+```
+gcc -c -std=c++11   1gbps50ms.cc
+gcc -o 1gbps50ms 1gbps50ms.o  ../build/lib/*.so
+```
