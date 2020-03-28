@@ -21,7 +21,7 @@ Test condition
 | 1Gbps | 5ms | TCP | 1040byte |  1000 | 1Mbps | cwnd1Mbps.png |
 | 1Gbps | 5ms | TCP | 1040byte |  1000 | 500Mbps | cwnd500Mbps.png |
 
-Congestion windows size changed as following
+Congestion windows size changed as following  
 Send rate as 1Mbps   
 ![1Gbps_50ms_1Mbps](./cwnd1Mbps.png)   
 Send rate as 500Mbps  
