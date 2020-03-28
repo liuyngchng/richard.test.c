@@ -1,5 +1,5 @@
 /**
-   gcc -o _tcp_client tcp_client.c libtime.so
+   gcc -o _tcp_client tcp_client.c libmytime.so
    runtime need to ldconfig let so file can be load.
   ./_tcp_client localhost 9999 > test.log &&  2>&1
   sudo iftop -i lo  
@@ -13,8 +13,10 @@
 #include <string.h>
 #include <errno.h>
 #include <arpa/inet.h>
-#include "time.h"
+#include "mytime.h"
 #define _BUF_SIZE_ 8096
+
+char* get_time();
 
 int main(int argc, char *argv[])
 {
@@ -33,18 +35,18 @@ int main(int argc, char *argv[])
         buf[i]=buf_init[i%strlen(buf_init)];
     }
    // memset(buf,0,sizeof(buf));
-    struct sockaddr_in client_sock;
+    struct sockaddr_in srv_sock;
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
     {
         printf("socket error, errno is %d, errstring is %s\n", errno, strerror(errno));
     }
-    bzero(&client_sock, sizeof(client_sock));
-    client_sock.sin_family = AF_INET;
-    inet_pton(AF_INET, ip, &client_sock.sin_addr);
-    client_sock.sin_port = htons(port);
-    client_sock.sin_addr.s_addr = inet_addr("127.0.0.1");
-    int ret = connect(sockfd, (struct sockaddr*)& client_sock, sizeof(client_sock));
+    bzero(&srv_sock, sizeof(srv_sock));
+    srv_sock.sin_family = AF_INET;
+    inet_pton(AF_INET, ip, &srv_sock.sin_addr);
+    srv_sock.sin_port = htons(port);
+    srv_sock.sin_addr.s_addr = inet_addr(ip);
+    int ret = connect(sockfd, (struct sockaddr*)& srv_sock, sizeof(srv_sock));
     if (ret < 0)
     {
         printf("connect to %s:%d error, errno is %d, errstring is %s\n", ip, port, errno, strerror(errno));

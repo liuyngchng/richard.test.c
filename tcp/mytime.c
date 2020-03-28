@@ -1,5 +1,5 @@
 /**
-** gcc -fPIC -shared time.c -o libtime.so
+** gcc -fPIC -shared mytime.c -o libmytime.so
 **/
 # include <time.h>
 # include <string.h>
@@ -17,8 +17,9 @@ char* get_time()
 
 int main()
 {
-   char * time = get_time();
+   char* time = get_time();
     time[strlen(time)-1]=0;
-   printf("The Calendar Time now is [%s]/n", time);
+   printf("The Calendar Time now is [%s]\n", time);
+   printf("[%s]\n", get_time());
         
 }

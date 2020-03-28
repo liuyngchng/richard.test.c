@@ -1,5 +1,5 @@
 /*********************************************************
-   gcc -o _tcp_server tcp_server.c libtime.so
+   gcc -o _tcp_server tcp_server.c libmytime.so
       * runtime need to ldconfig let so file can be load.
   > File Name:  tcp_server.c
   > Author:     richard
@@ -19,6 +19,7 @@
 #define _BACKLOG_ 10
 #define _BUF_SIZE_ 8096
 const char *inet_ntop(int af, const void *src,char *dst, socklen_t size);
+char* get_time();
 int main()
 {
     int sockfd = socket(AF_INET, SOCK_STREAM,0);
