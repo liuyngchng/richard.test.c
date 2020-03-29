@@ -1,6 +1,8 @@
 /*********************************************************
-   gcc -o _tcp_server tcp_server.c libmytime.so
-      * runtime need to ldconfig let so file can be load.
+   
+   gcc -o _tcp_server tcp_server.c /home/rd/so/libmytime.so
+   
+   * runtime need to ldconfig let so file can be load.
   > File Name:  tcp_server.c
   > Author:     richard
   > Mail:       liuyngchng@hotmail.com
@@ -28,7 +30,6 @@ int main()
         printf("[%s] socket error, errno is %d, errstring is %s\n", get_time(), errno, strerror(errno));
     }
     struct sockaddr_in server_sock;
-    struct sockaddr_in client_sock;
     bzero(&server_sock, sizeof(server_sock));
     server_sock.sin_family = AF_INET;
     server_sock.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -46,9 +47,11 @@ int main()
         return 2;
     }
     printf("[%s] bind and listen port:%d success, waiting accept...\n", get_time(), _PORT_);
+    struct sockaddr_in client_sock;
+    socklen_t len;
     while (1)
     {
-        socklen_t len = 0;
+        len = 0;
         int cfd = accept(sockfd, (struct sockaddr*)&client_sock,&len);
         if (cfd < 0)
         {
