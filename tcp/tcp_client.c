@@ -1,5 +1,5 @@
 /**
-   gcc -o _tcp_client tcp_client.c libmytime.so
+   gcc -o _tcp_client tcp_client.c /home/rd/so/libmytime.so
    runtime need to ldconfig let so file can be load.
   ./_tcp_client localhost 9999 > test.log &&  2>&1
   sudo iftop -i lo  
@@ -54,10 +54,10 @@ int main(int argc, char *argv[])
     }
     printf("connected to %s:%d\n",ip,port);
     //buf[strlen(buf)-1]='\0';
-    long long count = 0L;
-    while(1)
+    int count = 10000000;
+    while(count>0)
     {   
-        printf("[%s] %lld send msg: %lu\n", get_time(), ++count, strlen(buf));
+        printf("%d send msg: %lu\n", count--, strlen(buf));
         //write(sockfd, buf, strlen(buf));
        send(sockfd, buf, strlen(buf), 0);
        // break;
