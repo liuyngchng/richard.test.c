@@ -1,5 +1,5 @@
 ## 1. Introduction  
-This is a test project for richard to test some code snippet for c language.
+This is a test project.
 ## 2. gnuplot
 ```
 sudo apt-get install gunplot
