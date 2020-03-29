@@ -63,9 +63,9 @@ int main()
         memset(buf_ip, 0, sizeof(buf_ip));
         inet_ntop(AF_INET, &client_sock.sin_addr, buf_ip, sizeof(buf_ip));
         printf("[%s] get connection :ip is  %s, port is %d\n", get_time(), buf_ip, ntohs(client_sock.sin_port) );
+        char buf[_BUF_SIZE_];
         while (1)
         {
-            char buf[_BUF_SIZE_];
             memset(buf, 0, sizeof(buf));
             //read(cfd, buf, sizeof(buf));
             recv(cfd, buf, sizeof(buf), 0);

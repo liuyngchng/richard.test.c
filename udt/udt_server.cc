@@ -5,45 +5,56 @@
 #include "udt.h"
 #include <iostream>
 #include <string.h>
-
+#define _PORT 9000
+#define _BUF_SIZE_ 8096
 using namespace std;
 
 int main()
 {
-    UDTSOCKET serv = UDT::socket(AF_INET, SOCK_STREAM, 0);
+    UDTSOCKET sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in my_addr;
     my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(9000);
+    my_addr.sin_port = htons(_PORT);
     my_addr.sin_addr.s_addr = INADDR_ANY;
     memset(&(my_addr.sin_zero), '\0', 8);
 
-    if (UDT::ERROR == UDT::bind(serv, (sockaddr*)&my_addr, sizeof(my_addr)))
+    if (UDT::ERROR == UDT::bind(sockfd, (sockaddr*)&my_addr, sizeof(my_addr)))
     {
-        cout << "bind: " << UDT::getlasterror().getErrorMessage();
+        cout << "bind port "<< _PORT << " error: " << UDT::getlasterror().getErrorMessage() << endl;
         return 0;
     }
 
-    UDT::listen(serv, 10);
-
+    UDT::listen(sockfd, 10);
+    cout << "listening port " << _PORT << endl;
     int namelen;
     sockaddr_in their_addr;
-
-    UDTSOCKET recver = UDT::accept(serv, (sockaddr*)&their_addr, &namelen);
-
-    char ip[16];
-    cout << "new connection: " << inet_ntoa(their_addr.sin_addr) << ":" << ntohs(their_addr.sin_port) << endl;
-
-    char data[100];
-
-    if (UDT::ERROR == UDT::recv(recver, data, 100, 0))
+    while(1)
     {
-        cout << "recv:" << UDT::getlasterror().getErrorMessage() << endl;
-        return 0;
+        namelen=0;
+        UDTSOCKET rcv_sockfd = UDT::accept(sockfd, (sockaddr*)&their_addr, &namelen);
+        char ip[16];
+        cout << "con from: " << inet_ntoa(their_addr.sin_addr) << ":" << ntohs(their_addr.sin_port) << endl;
+        char buf[_BUF_SIZE_];
+        while(1)
+        {
+            memset(buf,0,sizeof(buf));
+            if (UDT::ERROR == UDT::recv(rcv_sockfd, buf, sizeof(buf), 0))
+            {
+                cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
+                return 1;
+            }
+            if(strlen(buf)==0)
+            {
+                cout << "rec finished." << endl;
+                break;
+            }
+            else
+            {
+                cout << "len: " << strlen(buf) << endl;
+            }
+        }
+        UDT::close(rcv_sockfd);
     }
-    cout << data << endl;
-
-    UDT::close(recver);
-    UDT::close(serv);
-
-    return 1;
+    UDT::close(sockfd);
+    return 0;
 }
