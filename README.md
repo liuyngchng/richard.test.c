@@ -4,8 +4,8 @@ This is a test project.
 ```
 sudo apt-get install gunplot
 gnuplot
-gnuplot> set terminal png size 640,480
-gnuplot> set output "cwnd.png"
-gnuplot> plot "cwnd.dat" using 1:2 title 'Congestion Window' with linespoints
-gnuplot> exit
+set terminal png size 640,480
+set output "cwnd.png"
+plot "cwnd.dat" using 1:2 title 'Congestion Window' with linespoints
+exit
 ```

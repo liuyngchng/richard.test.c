@@ -1,7 +1,7 @@
 /*********************************************************
    
    gcc -o _tcp_server tcp_server.c /home/rd/so/libmytime.so
-   
+   ./_tcp_server > /dev/null 2>&1 &   
    * runtime need to ldconfig let so file can be load.
   > File Name:  tcp_server.c
   > Author:     richard

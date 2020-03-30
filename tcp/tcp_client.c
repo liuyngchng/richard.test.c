@@ -1,8 +1,11 @@
 /**
    gcc -o _tcp_client tcp_client.c /home/rd/so/libmytime.so
    runtime need to ldconfig let so file can be load.
-  ./_tcp_client localhost 9999 > test.log &&  2>&1
-  sudo iftop -i lo  
+   ./_tcp_client 10.0.0.1 9999 > /dev/null  2>&1 & 
+   ifstat > tp.dat &
+   vim tp.dat
+   :g/^\s*$/d      // delete blank line
+   sudo iftop -i lo  
   */
 #include <stdio.h>
 #include <stdlib.h>

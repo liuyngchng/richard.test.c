@@ -4,14 +4,14 @@
 
 | Bandwidth | Delay | Protocol | Throughput |  File |
 | --- | ---| --- | ---|  -- |
-| 1Gbps | 5ms | TCP | 900Mbps |  1Gbps_5ms_mark.png |
-| 1Gbps | 50ms | TCP | 600Mbps |  1Gbps_50ms_mark.png |
+| 1Gbps | 5ms | TCP | 900Mbps |  tcp_traffic_1Gbps_5ms.png |
+| 1Gbps | 50ms | TCP | 600Mbps |  tcp_traffic_1Gbps_50ms.png |
 
 1Gbps 5ms 网络吞吐量测试结果如下图  
-![tcp/1Gbps_5ms_mark.png](./tcp/1Gbps_5ms_mark.png)
+![tcp/tcp_traffic_1Gbps_5ms.png](./tcp/tcp_traffic_1Gbps_5ms.png)
 
 1Gbps 50ms 网络吞吐量测试结果如下图  
-![tcp/1Gbps_50ms_mark.png](./tcp/1Gbps_50ms_mark.png)
+![tcp/tcp_traffic_1Gbps_50ms.png](./tcp/tcp_traffic_1Gbps_50ms.png)
 
 # 1.2 Congestion Window
 Test condition
