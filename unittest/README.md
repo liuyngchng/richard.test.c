@@ -1,5 +1,5 @@
 # 1. TCP Test
-# 1.1 长肥管道网络（LFN，long fat network）throughput test
+# 1.1 LFN(long fat network) TCP throughput test
  测试结果如下表所示  
 
 | Bandwidth | Delay | Protocol | Throughput |  File |
@@ -27,15 +27,17 @@ Congestion windows size changed as following
 ![tcp/cwnd100Mbps1ms.png](./tcp/cwnd100Mbps1ms.png)  
 ![tcp/cwnd1Gbps5ms.png](./tcp/cwnd1Gbps5ms.png)  
 ![tcp/cwnd1Gbps50ms.png](./tcp/cwnd1Gbps50ms.png)  
-# 2. UDT
-## 2.1 network traffic
-```
-ifstat -i lo
-```
-| Bandwidth | Delay | Protocol | Throughput |  File |
-| --- | ---| --- | ---|  -- |
-| 1Gbps | 5ms | UDT |  |   |
-| 1Gbps | 50ms | UDT | 240Mbps |  udt/udt_traffic_1Gbps_50ms.png |
+
+# 2. UDT  
+## 2.1 network traffic  
+
+UDT throughput test as below
+
+| Bandwidth | Delay | Protocol | Throughput |  File |  
+| --- | ---| --- | ---|  -- |  
+| 1Gbps | 5ms | UDT |  |   |  
+| 1Gbps | 50ms | UDT | 240Mbps |  udt/udt_traffic_1Gbps_50ms.png |  
 
 1Gbps 50ms 网络吞吐量测试结果如下图  
-![udt/udt_traffic_1Gbps_50ms.png](./udt/udt_traffic_1Gbps_50ms.png)
+![udt/udt_traffic_1Gbps_50ms.png](./udt/udt_traffic_1Gbps_50ms.png)  
+
