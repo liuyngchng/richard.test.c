@@ -4,9 +4,9 @@
 
 | Bandwidth | Delay | Protocol | Throughput |  File |
 | --- | ---| --- | ---|  -- |
-| 1Gbps | 5ms | TCP | 900Mbps |  tcp_traffic_1Gbps_5ms.png |
-| 1Gbps | 50ms | TCP | 600Mbps |  tcp_traffic_1Gbps_50ms.png |
-| 1Gbps | 50ms | UDT | 240Mbps | udt_traffic_1Gbps_50ms.png |
+| 1Gbps | 5ms | TCP | 900Mbps |  tcp/tcp_traffic_1Gbps_5ms.png |
+| 1Gbps | 50ms | TCP | 600Mbps |  tcp/tcp_traffic_1Gbps_50ms.png |
+| 1Gbps | 50ms | UDT | 240Mbps | udt/udt_traffic_1Gbps_50ms.png |
 
 1Gbps 5ms 网络吞吐量测试结果如下图  
 ![tcp/tcp_traffic_1Gbps_5ms.png](./tcp/tcp_traffic_1Gbps_5ms.png)
@@ -35,7 +35,7 @@ ifstat -i lo
 | Bandwidth | Delay | Protocol | Throughput |  File |
 | --- | ---| --- | ---|  -- |
 | 1Gbps | 5ms | UDT |  |   |
-| 1Gbps | 50ms | UDT | 240Mbps |  udt_traffic_1Gbps_50ms.png |
+| 1Gbps | 50ms | UDT | 240Mbps |  udt/udt_traffic_1Gbps_50ms.png |
 
 1Gbps 50ms 网络吞吐量测试结果如下图  
-![tcp/udt_traffic_1Gbps_50ms.png](./udt/udt_traffic_1Gbps_50ms.png)
+![udt/udt_traffic_1Gbps_50ms.png](./udt/udt_traffic_1Gbps_50ms.png)
