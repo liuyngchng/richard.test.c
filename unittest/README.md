@@ -16,11 +16,11 @@
 # 1.2 Congestion Window
 Test condition
 
-| Bandwidth | Delay | Protocol | packetSize  | dataRate | File |
-| --- | ---| --- | ---| --- | --- |  
-| 100Mbps | 1ms | TCP | 1040byte | 100Mbps | cwnd100Mbps1ms.png |
-| 1Gbps | 5ms | TCP | 1040byte | 500Mbps | cwnd1Gbps5ms.png |
-| 1Gbps | 50ms | TCP | 1040byte | 500Mbps | cwnd1Gbps50ms.png |
+| Bandwidth | Delay | packetSize  | dataRate | File |
+| --- | ---| --- | --- | --- |  
+| 100Mbps | 1ms | 1040byte | 100Mbps | tcp/cwnd100Mbps1ms.png |
+| 1Gbps | 5ms | 1040byte | 500Mbps | tcp/cwnd1Gbps5ms.png |
+| 1Gbps | 50ms | 1040byte | 500Mbps | tcp/cwnd1Gbps50ms.png |
 
 Congestion windows size changed as following   
 ![tcp/cwnd100Mbps1ms.png](./tcp/cwnd100Mbps1ms.png)  
