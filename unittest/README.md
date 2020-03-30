@@ -6,6 +6,7 @@
 | --- | ---| --- | ---|  -- |
 | 1Gbps | 5ms | TCP | 900Mbps |  tcp/tcp_traffic_1Gbps_5ms.png |
 | 1Gbps | 50ms | TCP | 600Mbps |  tcp/tcp_traffic_1Gbps_50ms.png |
+| 1Gbps | 1ms | UDT | 440Mbps | udt/udt_traffic_1Gbps_1ms.png |  
 | 1Gbps | 50ms | UDT | 240Mbps | udt/udt_traffic_1Gbps_50ms.png |
 
 1Gbps 5ms 网络吞吐量测试结果如下图  
@@ -35,9 +36,10 @@ UDT throughput test as below
 
 | Bandwidth | Delay | Protocol | Throughput |  File |  
 | --- | ---| --- | ---|  -- |  
-| 1Gbps | 5ms | UDT |  |   |  
-| 1Gbps | 50ms | UDT | 240Mbps |  udt/udt_traffic_1Gbps_50ms.png |  
+| 1Gbps | 1ms | UDT | 440Mbps | udt/udt_traffic_1Gbps_1ms.png |  
+| 1Gbps | 50ms | UDT | 240Mbps | udt/udt_traffic_1Gbps_50ms.png |  
 
+1Gbps 1ms 网络吞吐量测试结果如下图  
+![udt/udt_traffic_1Gbps_1ms.png](./udt/udt_traffic_1Gbps_1ms.png)  
 1Gbps 50ms 网络吞吐量测试结果如下图  
 ![udt/udt_traffic_1Gbps_50ms.png](./udt/udt_traffic_1Gbps_50ms.png)  
-
