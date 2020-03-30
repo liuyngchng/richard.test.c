@@ -83,8 +83,8 @@ gcc -o 1gbps50ms 1gbps50ms.o  ../build/lib/*.so
 ```
 ./1gbps50ms > cwnd.dat 2>&1
 gnuplot
-gnuplot> set terminal png size 1024,768
-gnuplot> set output "cwnd.png"
-gnuplot> plot "cwnd.dat" using 1:2 title 'BW=1Gbps, Delay=50ms SndRate=500Mbps Congestion Window' with linespoints
-gnuplot> exit
+set terminal png size 1024,768
+set output "cwnd.png"
+plot "cwnd.dat" using 1:2 title 'BW=1Gbps, Delay=50ms SndRate=500Mbps Congestion Window' with linespoints
+exit
 ```

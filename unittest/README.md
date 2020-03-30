@@ -16,14 +16,16 @@
 # 1.2 Congestion Window
 Test condition
 
-| Bandwidth | Delay | Protocol | packetSize |  packetSnd | sndRate | File |
-| --- | ---| --- | ---| --- | --- | --- |  
-| 1Gbps | 5ms | TCP | 1040byte |  1000 | 1Mbps | cwnd1Mbps.png |
-| 1Gbps | 5ms | TCP | 1040byte |  1000 | 500Mbps | cwnd500Mbps.png |
+| Bandwidth | Delay | Protocol | packetSize  | dataRate | File |
+| --- | ---| --- | ---| --- | --- |  
+| 100Mbps | 1ms | TCP | 1040byte | 100Mbps | cwnd100Mbps1ms.png |
+| 1Gbps | 5ms | TCP | 1040byte | 500Mbps | cwnd1Gbps5ms.png |
+| 1Gbps | 50ms | TCP | 1040byte | 500Mbps | cwnd1Gbps50ms.png |
 
-Congestion windows size changed as following  
-Send rate as 1Mbps   
-![tcp/cwnd1Mbps.png](./tcp/cwnd1Mbps.png) 
+Congestion windows size changed as following   
+![tcp/cwnd100Mbps1ms.png](./tcp/cwnd100Mbps1ms.png)  
+![tcp/cwnd1Gbps5ms.png](./tcp/cwnd1Gbps5ms.png)  
+![tcp/cwnd1Gbps50ms.png](./tcp/cwnd1Gbps50ms.png)  
 # 2. UDT
 ## 2.1 network traffic
 ```
