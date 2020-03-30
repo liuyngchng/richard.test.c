@@ -1,5 +1,6 @@
 /**
   g++ -o _udt_server udt_server.cc /home/rd/so/libudt.so -lpthread
+  ./_udt_server > /dev/null 2>&1 &
  **/
 #include <arpa/inet.h>
 #include "udt.h"

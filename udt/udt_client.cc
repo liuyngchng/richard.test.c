@@ -1,5 +1,7 @@
 /**
   g++ -o _udt_client udt_client.cc  /home/rd/so/libudt.so -lpthread
+  ./_udt_client 10.0.0.1 9000 > /dev/null 2>&1 &
+  ifstat > tp.dat &
  **/
 #include <iostream>
 #include "udt.h"
