@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #define _BUF_SIZE_ 8092
-
+#define _MODE_ 2              // 1:streaming , 2:msg 
 using namespace std;
 using namespace UDT;
 
@@ -22,14 +22,23 @@ int main(int argc, char* argv[])
     }
     char *ip = argv[1];
     int port = atoi(argv[2]);
-    printf("client will connect to server %s:%d\n", ip, port);
     char buf_init[]="hello,this is a test";
     char buf[_BUF_SIZE_];
     for(int i=0;i<sizeof(buf);i++)
     {
         buf[i]=buf_init[i%strlen(buf_init)];
     }
-    UDTSOCKET sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
+    UDTSOCKET sockfd;
+    if (_MODE_ == 1)
+    {
+        sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
+        cout << "streaming mode" << endl;
+    }
+    else
+    {
+        sockfd = UDT::socket(AF_INET, SOCK_DGRAM, 0);
+        cout << "message mode" << endl;
+    }
     sockaddr_in srv_addr;
     srv_addr.sin_family = AF_INET;
     srv_addr.sin_port = htons(port);
@@ -44,15 +53,27 @@ int main(int argc, char* argv[])
     }
 	cout << "connected to " << ip << ":" << port << endl;
     int count = 10000000;
+    int ss;
     while(count>0)
 	{
         count--;
-    	if (UDT::ERROR == UDT::send(sockfd, buf, strlen(buf), 0))
+    	if (_MODE_ == 1)
+        {
+            ss = UDT::send(sockfd, buf, strlen(buf), 0);
+        }
+        else
+        {
+            ss = UDT::sendmsg(sockfd, buf, strlen(buf), -1, false);
+        }
+        if (UDT::ERROR == ss)
     	{
         	cout << "send error: " << UDT::getlasterror().getErrorMessage();
         	return 2;
     	}
-        cout << "send " << count << ": " << strlen(buf) << endl;
+        else
+        {
+           // cout << "send " << count << ": " << ss << endl;
+        }
 	}
     UDT::close(sockfd);
     return 0;

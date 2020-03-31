@@ -8,13 +8,25 @@
 #include <string.h>
 #define _PORT 9000
 #define _BUF_SIZE_ 8096
+#define _MODE_ 2            // 1:stream, 2:message
+
 using namespace std;
 
 void config_socket_opt(UDTSOCKET sockfd);
 
 int main()
 {
-    UDTSOCKET sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
+    UDTSOCKET sockfd;
+    if (_MODE_ == 1)
+    {
+        sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
+        cout << "streaming mode" << endl;
+    }
+    else
+    {
+        sockfd = UDT::socket(AF_INET, SOCK_DGRAM, 0);
+        cout << "message mode" << endl;
+    }
     config_socket_opt(sockfd);
     sockaddr_in my_addr;
     my_addr.sin_family = AF_INET;
@@ -39,10 +51,19 @@ int main()
         char ip[16];
         cout << "con from: " << inet_ntoa(their_addr.sin_addr) << ":" << ntohs(their_addr.sin_port) << endl;
         char buf[_BUF_SIZE_];
+        int rsize;
         while(1)
         {
             memset(buf,0,sizeof(buf));
-            if (UDT::ERROR == UDT::recv(rcv_sockfd, buf, sizeof(buf), 0))
+            if (_MODE_ == 1)
+            {
+                rsize = UDT::recv(rcv_sockfd, buf, sizeof(buf), 0);
+            }
+            else
+            {
+                rsize = UDT::recvmsg(rcv_sockfd, buf, sizeof(buf));
+            }
+            if (UDT::ERROR == rsize)
             {
                 cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
                 return 1;
@@ -54,7 +75,7 @@ int main()
             }
             else
             {
-                cout << "len: " << strlen(buf) << endl;
+                //cout << "len: " << strlen(buf) << endl;
             }
         }
         UDT::close(rcv_sockfd);
