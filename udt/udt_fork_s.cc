@@ -1,6 +1,10 @@
 /**
   g++ -o _udt_server udt_server.cc /home/rd/so/libudt.so -lpthread
   ./_udt_server > /dev/null 2>&1 &
+  UDT does not support multi-process models
+  (e.g., using fork system call) due to efficiency considerations,
+  so this method does not work if the existing
+  application uses the same sockets in multiple processes.
  **/
 #include <arpa/inet.h>
 #include "udt.h"

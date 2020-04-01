@@ -16,20 +16,16 @@ void config_socket_opt(UDTSOCKET sockfd);
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2)
-    {   
+	if (argc != 2) {
         cerr <<"pls input listening port" << endl;
         return 1;
     }
     int port = atoi(argv[1]);
     UDTSOCKET sockfd;
-    if (_MODE_ == 1)
-    {
+    if (_MODE_ == 1) {
         sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
         cout << "streaming mode" << endl;
-    }
-    else
-    {
+    } else {
         sockfd = UDT::socket(AF_INET, SOCK_DGRAM, 0);
         cout << "message mode" << endl;
     }
@@ -40,9 +36,10 @@ int main(int argc, char* argv[])
     my_addr.sin_addr.s_addr = INADDR_ANY;
     memset(&(my_addr.sin_zero), '\0', 8);
 
-    if (UDT::ERROR == UDT::bind(sockfd, (sockaddr*)&my_addr, sizeof(my_addr)))
-    {
-        cout << "bind port "<< port << " error: " << UDT::getlasterror().getErrorMessage() << endl;
+    if (UDT::ERROR == UDT::bind(sockfd, 
+        (sockaddr*)&my_addr, sizeof(my_addr))) {
+        cout << "bind port "<< port << " error: " 
+             << UDT::getlasterror().getErrorMessage() << endl;
         return 0;
     }
 
@@ -50,37 +47,29 @@ int main(int argc, char* argv[])
     cout << "listening port " << port << endl;
     int namelen;
     sockaddr_in their_addr;
-    while(1)
-    {
+    while (1) {
         namelen=0;
         UDTSOCKET rcv_sockfd = UDT::accept(sockfd, (sockaddr*)&their_addr, &namelen);
         char ip[16];
-        cout << "con from: " << inet_ntoa(their_addr.sin_addr) << ":" << ntohs(their_addr.sin_port) << endl;
+        cout << "con from: " << inet_ntoa(their_addr.sin_addr) 
+             << ":" << ntohs(their_addr.sin_port) << endl;
         char buf[_BUF_SIZE_];
         int rsize;
-        while(1)
-        {
+        while (1) {
             memset(buf, 0, sizeof(buf));
-            if (_MODE_ == 1)
-            {
+            if (_MODE_ == 1) {
                 rsize = UDT::recv(rcv_sockfd, buf, sizeof(buf), 0);
-            }
-            else
-            {
+            } else {
                 rsize = UDT::recvmsg(rcv_sockfd, buf, sizeof(buf));
             }
-            if (UDT::ERROR == rsize)
-            {
+            if (UDT::ERROR == rsize) {
                 cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
                 return 1;
             }
-            if(strlen(buf)==0)
-            {
+            if (strlen(buf)==0) {
                 cout << "rec finished." << endl;
                 break;
-            }
-            else
-            {
+            } else {
                 //cout << "len: " << strlen(buf) << endl;
             }
         }
