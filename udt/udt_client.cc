@@ -13,12 +13,12 @@
 using namespace std;
 using namespace UDT;
 
+void config_socket_opt(UDTSOCKET sockfd);
 bool check_debug_mode(int argc, char* argv[]);
 
 int main(int argc, char* argv[])
 {
-	if (argc < 3)
-    {
+	if (argc < 3) {
         cerr << "pls input server IP and port separate by blank space" << endl;
         return 1;
     }
@@ -27,21 +27,18 @@ int main(int argc, char* argv[])
     int port = atoi(argv[2]);
     char buf_init[]="hello,this is a test";
     char buf[_BUF_SIZE_];
-    for(int i=0;i<sizeof(buf);i++)
-    {
+    for (int i=0; i<sizeof(buf); i++) {
         buf[i]=buf_init[i%strlen(buf_init)];
     }
     UDTSOCKET sockfd;
-    if (_MODE_ == 1)
-    {
+    if (_MODE_ == 1) {
         sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
         cout << "streaming mode" << endl;
-    }
-    else
-    {
+    } else {
         sockfd = UDT::socket(AF_INET, SOCK_DGRAM, 0);
         cout << "message mode" << endl;
     }
+	config_socket_opt(sockfd);
     sockaddr_in srv_addr;
     srv_addr.sin_family = AF_INET;
     srv_addr.sin_port = htons(port);
@@ -49,32 +46,25 @@ int main(int argc, char* argv[])
     memset(&(srv_addr.sin_zero), '\0', 8);
 
     // connect to the server, implict bind
-    if (UDT::ERROR == UDT::connect(sockfd, (sockaddr*)&srv_addr, sizeof(srv_addr)))
-    {
+    if (UDT::ERROR == UDT::connect(sockfd, (sockaddr*)&srv_addr, sizeof(srv_addr))) {
         cout << "connect error: " << UDT::getlasterror().getErrorMessage();
         return 1;
     }
 	cout << "connected to " << ip << ":" << port << endl;
-    int count = 10000000;
+    int count = 0;
     int ss;
-    while(count>0)
-	{
-        count--;
-    	if (_MODE_ == 1)
-        {
+    while (count < 10000000) {
+        count++;
+    	if (_MODE_ == 1) {
             ss = UDT::send(sockfd, buf, strlen(buf), 0);
-        }
-        else
-        {
+        } else {
             ss = UDT::sendmsg(sockfd, buf, strlen(buf), -1, false);
         }
-        if (UDT::ERROR == ss)
-    	{
+        if (UDT::ERROR == ss) {
         	cout << "send error: " << UDT::getlasterror().getErrorMessage();
         	return 2;
     	}
-        if (debug)
-        {
+        if (debug) {
            cout << "send " << count << ": " << ss << endl;
         }
 	}
@@ -85,12 +75,9 @@ int main(int argc, char* argv[])
 bool check_debug_mode(int argc, char* argv[])
 {
 	bool debug =false;
-	if (argc == 4)  
-    {   
-        for(int i=0; i< argc; i++)
-        {
-            if(strcmp(argv[i], "-d")==0)
-            {
+	if (argc == 4) {
+        for (int i = 0; i < argc; i++) {
+            if (strcmp(argv[i], "-d")==0) {
                 debug = true;
                 cout << "in debug mode" << endl;
             }
@@ -98,3 +85,26 @@ bool check_debug_mode(int argc, char* argv[])
     }
 	return debug;
 }
+
+void config_socket_opt(UDTSOCKET fd)
+{
+    int block[5];
+    int size = sizeof(int);
+    UDT::getsockopt(fd, 0, UDT_SNDBUF, &block[0], &size);
+    UDT::getsockopt(fd, 0, UDT_RCVBUF, &block[1], &size);
+    UDT::getsockopt(fd, 0, UDT_FC, &block[2], &size);
+    UDT::getsockopt(fd, 0, UDT_MSS, &block[3], &size);
+    UDT::getsockopt(fd, 0, UDT_SNDTIMEO, &block[4], &size);
+    cout << "socket option" << endl;
+    cout << "UDT_SNDBUF = " << block[0] << endl << "UDT_RCVBUF = " << block[1] << endl;
+    cout << "UDT_FC = " << block[2] << endl << "UDT_MSS = "<< block[3] << endl;
+    cout << "UDT_SNDTIMEO = " << block[4] << endl;
+    cout << "start config socket option." << endl;
+    int bdp = 100000;   //1000Mbps*1ms=1000Mb*10^-3=1Mb=10^6b=0.1^10^6B=100000B
+    int a = 2000;
+    UDT::setsockopt(fd, 0, UDT_SNDTIMEO, &a, sizeof(int));
+    UDT::getsockopt(fd, 0, UDT_SNDTIMEO, &block[4], &size);
+    cout << "UDT_SNDTIMEO = "<< block[4] << endl;
+    return;
+}
+
