@@ -13,13 +13,16 @@
 using namespace std;
 using namespace UDT;
 
+bool check_debug_mode(int argc, char* argv[]);
+
 int main(int argc, char* argv[])
 {
-	if (argc != 3)
+	if (argc < 3)
     {
-        printf("Error: pls input server IP and port separate by blank space \n");
+        cerr << "pls input server IP and port separate by blank space" << endl;
         return 1;
     }
+    bool debug = check_debug_mode(argc, argv);
     char *ip = argv[1];
     int port = atoi(argv[2]);
     char buf_init[]="hello,this is a test";
@@ -70,11 +73,28 @@ int main(int argc, char* argv[])
         	cout << "send error: " << UDT::getlasterror().getErrorMessage();
         	return 2;
     	}
-        else
+        if (debug)
         {
-           // cout << "send " << count << ": " << ss << endl;
+           cout << "send " << count << ": " << ss << endl;
         }
 	}
     UDT::close(sockfd);
     return 0;
+}
+
+bool check_debug_mode(int argc, char* argv[])
+{
+	bool debug =false;
+	if (argc == 4)  
+    {   
+        for(int i=0; i< argc; i++)
+        {
+            if(strcmp(argv[i], "-d")==0)
+            {
+                debug = true;
+                cout << "in debug mode" << endl;
+            }
+        }
+    }
+	return debug;
 }

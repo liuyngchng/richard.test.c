@@ -1,9 +1,12 @@
 /**
-** gcc -fPIC -shared mytime.c -o libmytime.so
+  g++ -fPIC -shared mytime.cc -o libmytime.so
 **/
-# include <time.h>
-# include <string.h>
-# include <stdio.h> 
+#include <time.h>
+#include <string.h>
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
 char* get_time()
 {
     struct tm *ptr; 
@@ -19,7 +22,6 @@ int main()
 {
    char* time = get_time();
     time[strlen(time)-1]=0;
-   printf("The Calendar Time now is [%s]\n", time);
-   printf("[%s]\n", get_time());
-        
+   cout << "the calendar time now is " << time << endl;
+   cout << "output " << get_time() << endl;
 }

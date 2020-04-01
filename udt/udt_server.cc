@@ -6,7 +6,7 @@
 #include "udt.h"
 #include <iostream>
 #include <string.h>
-#define _PORT 9000
+#include <stdlib.h>
 #define _BUF_SIZE_ 8096
 #define _MODE_ 2            // 1:stream, 2:message
 
@@ -14,8 +14,14 @@ using namespace std;
 
 void config_socket_opt(UDTSOCKET sockfd);
 
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc != 2)
+    {   
+        cerr <<"pls input listening port" << endl;
+        return 1;
+    }
+    int port = atoi(argv[1]);
     UDTSOCKET sockfd;
     if (_MODE_ == 1)
     {
@@ -30,18 +36,18 @@ int main()
     config_socket_opt(sockfd);
     sockaddr_in my_addr;
     my_addr.sin_family = AF_INET;
-    my_addr.sin_port = htons(_PORT);
+    my_addr.sin_port = htons(port);
     my_addr.sin_addr.s_addr = INADDR_ANY;
     memset(&(my_addr.sin_zero), '\0', 8);
 
     if (UDT::ERROR == UDT::bind(sockfd, (sockaddr*)&my_addr, sizeof(my_addr)))
     {
-        cout << "bind port "<< _PORT << " error: " << UDT::getlasterror().getErrorMessage() << endl;
+        cout << "bind port "<< port << " error: " << UDT::getlasterror().getErrorMessage() << endl;
         return 0;
     }
 
     UDT::listen(sockfd, 10);
-    cout << "listening port " << _PORT << endl;
+    cout << "listening port " << port << endl;
     int namelen;
     sockaddr_in their_addr;
     while(1)
@@ -54,7 +60,7 @@ int main()
         int rsize;
         while(1)
         {
-            memset(buf,0,sizeof(buf));
+            memset(buf, 0, sizeof(buf));
             if (_MODE_ == 1)
             {
                 rsize = UDT::recv(rcv_sockfd, buf, sizeof(buf), 0);

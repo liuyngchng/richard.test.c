@@ -10,7 +10,7 @@
  ```
  sudo python ./test.py
  iperf h1 h2                    #   测试两个主机h1和h2之间的TCP带宽
- iperfupd bw h1 h2              #   测试两个主机h1和h2之间的UDP带宽
+ iperfudp bw h1 h2              #   测试两个主机h1和h2之间的UDP带宽
  ```
 
  h1 ping h2 发现 unreachable时，因为没有添加流表，手动添加流表
