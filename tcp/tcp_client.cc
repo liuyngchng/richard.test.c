@@ -27,8 +27,7 @@ char* get_time();
 
 int main(int argc, char *argv[])
 {
-    if (argc < 3)
-    {
+    if (argc < 3) {
         cerr << "pls input server IP and port separate by blank space" << endl;
         return 1;
     }
@@ -38,15 +37,13 @@ int main(int argc, char *argv[])
     cout << "client will connect to server" << ip << ":" << port << endl;
     char buf_init[]="hello,this is a test";
     char buf[_BUF_SIZE_];
-    for(int i=0;i<sizeof(buf);i++)
-    {
+    for(int i=0;i<sizeof(buf);i++) {
         buf[i]=buf_init[i%strlen(buf_init)];
     }
    // memset(buf,0,sizeof(buf));
     struct sockaddr_in srv_sock;
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd < 0)
-    {
+    if (sockfd < 0) {
         cout << "socket error, errno is" << errno 
              << "errstring is" << strerror(errno) << endl;
     }
@@ -56,8 +53,7 @@ int main(int argc, char *argv[])
     srv_sock.sin_port = htons(port);
     srv_sock.sin_addr.s_addr = inet_addr(ip);
     int ret = connect(sockfd, (struct sockaddr*)& srv_sock, sizeof(srv_sock));
-    if (ret < 0)
-    {
+    if (ret < 0) {
         cout << "connect to " << ip << ":" << port 
              << " error, errno is " << errno << ", errstring is " 
              << strerror(errno) << endl;
@@ -66,18 +62,15 @@ int main(int argc, char *argv[])
     cout << "connected to " << ip << ":"<< port << endl;
     //buf[strlen(buf)-1]='\0';
     int count = 10000000;
-    while(count>0)
-    {   
+    while (count>0) {
         //write(sockfd, buf, strlen(buf));
         int ss = send(sockfd, buf, strlen(buf), 0);
-		if(debug)
-		{
+		if(debug) {
 			cout << count-- << " snd " << ss << endl;
 		}
        //break;
        //sleep(1);
-        if (strncasecmp(buf,"quit", 4) == 0)
-        {
+        if (strncasecmp(buf,"quit", 4) == 0) {
             cout <<"quit !"<< endl;
             break;
         }
@@ -91,12 +84,9 @@ int main(int argc, char *argv[])
 bool check_debug_mode(int argc, char* argv[])
 {
 	bool debug =false;
-	if (argc == 4)  
-    {   
-        for(int i=0; i< argc; i++)
-        {
-            if(strncasecmp(argv[i], "-d", 2)==0)
-            {
+	if (argc == 4) {
+        for(int i=0; i< argc; i++) {
+            if(strncasecmp(argv[i], "-d", 2)==0) {
                 debug = true;
                 cout << "in debug mode" << endl;
             }
