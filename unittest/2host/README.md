@@ -1,5 +1,15 @@
-# 1. TCP Test
-# 1.1 LFN(long fat network) TCP throughput test
+# 1. Topo
+```
+s1
++- h1 server
++- h2 client
+```
+h1 s1 delay 25ms
+h2 s1 delay 25ms
+# 2. TCP Test
+
+# 2.1 LFN(long fat network) TCP throughput test
+ 
  测试结果如下表所示  
 
 | Bandwidth | Delay | Protocol | Throughput |  File |
@@ -15,7 +25,7 @@
 1Gbps 50ms 网络吞吐量测试结果如下图  
 ![tcp/tcp_traffic_1Gbps_50ms.png](./tcp/tcp_traffic_1Gbps_50ms.png)
 
-# 1.2 Congestion Window
+# 2.2 Congestion Window
 Test condition
 
 | Bandwidth | Delay | packetSize  | dataRate | File |
@@ -29,8 +39,8 @@ Congestion windows size changed as following
 ![tcp/cwnd1Gbps5ms.png](./tcp/cwnd1Gbps5ms.png)  
 ![tcp/cwnd1Gbps50ms.png](./tcp/cwnd1Gbps50ms.png)  
 
-# 2. UDT  
-## 2.1 network traffic  
+# 3. UDT  
+## 3.1 network traffic  
 
 UDT throughput test as below
 
