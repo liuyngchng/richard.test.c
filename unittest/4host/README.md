@@ -1,4 +1,5 @@
 # 1. topo
+
 ```
 s1
 +- h1
@@ -10,8 +11,9 @@ h1 s1 delay 25ms
 h2 s1 delay 25ms  
 h3 s1 delay 25ms  
 h4 s1 delay 25ms  
-# 2. Throughput
-## 2.1 TCP
+
+# 2. Throughput  
+## 2.1 TCP  
 
 | No | Hosts | Throughput | File |  
 | -- | -- | -- | -- |  
@@ -21,13 +23,14 @@ h4 s1 delay 25ms
 
 2 hosts  
 ![tcp/1Gbps_50ms_TCP_2hosts_600Mbps.png](./tcp/1Gbps_50ms_TCP_2hosts_600Mbps.png)  
+
 3 hosts  
 ![tcp/1Gbps_50ms_TCP_3hosts_880Mbps.png](./tcp/1Gbps_50ms_TCP_3hosts_880Mbps.png)  
+
 4 hosts  
 ![tcp/1Gbps_50ms_TCP_4hosts_880Mbps.png](./tcp/1Gbps_50ms_TCP_4hosts_880Mbps.png)  
 
-## 2.2 UDT
-
+## 2.2 UDT  
 
 | No | Hosts | Throughput | File |  
 | -- | -- | -- | -- |  
@@ -37,7 +40,9 @@ h4 s1 delay 25ms
 
 2 hosts  
 ![udt/1Gbps_50ms_UDT_2hosts_300Mbps.png](./udt/1Gbps_50ms_UDT_2hosts_300Mbps.png)  
+
 3 hosts  
 ![udt/1Gbps_50ms_UDT_3hosts_300Mbps.png](./udt/1Gbps_50ms_UDT_3hosts_300Mbps.png)  
+  
 4 hosts  
 ![udt/1Gbps_50ms_UDT_4hosts_300Mbps.png](./udt/1Gbps_50ms_UDT_4hosts_300Mbps.png)  
