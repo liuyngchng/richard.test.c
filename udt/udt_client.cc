@@ -4,7 +4,8 @@
   ifstat > tp.dat &
  **/
 #include <iostream>
-#include "udt.h"
+#include <udt.h>
+#include <cc.h>
 #include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
@@ -88,23 +89,34 @@ bool check_debug_mode(int argc, char* argv[])
 
 void config_socket_opt(UDTSOCKET fd)
 {
-	int block[5];
+	int block[6];
 	int size = sizeof(int);
 	UDT::getsockopt(fd, 0, UDT_SNDBUF, &block[0], &size);
 	UDT::getsockopt(fd, 0, UDT_RCVBUF, &block[1], &size);
 	UDT::getsockopt(fd, 0, UDT_FC, &block[2], &size);
 	UDT::getsockopt(fd, 0, UDT_MSS, &block[3], &size);
 	UDT::getsockopt(fd, 0, UDT_SNDTIMEO, &block[4], &size);
+	UDT::getsockopt(fd, 0, UDT_CC, &block[5], &size);
 	cout << "socket option" << endl;
 	cout << "UDT_SNDBUF = " << block[0] << endl << "UDT_RCVBUF = " << block[1] << endl;
 	cout << "UDT_FC = " << block[2] << endl << "UDT_MSS = "<< block[3] << endl;
-	cout << "UDT_SNDTIMEO = " << block[4] << endl;
+	cout << "UDT_SNDTIMEO = " << block[4] << endl << "UDT_CC = " << block[5] << endl;
 	cout << "start config socket option." << endl;
 	int bdp = 100000;	//1000Mbps*1ms=1000Mb*10^-3=1Mb=10^6b=0.1^10^6B=100000B
-	int a = 2000;
+	int a = 10000;
 	UDT::setsockopt(fd, 0, UDT_SNDTIMEO, &a, sizeof(int));
+//	UDT::setsockopt(fd, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
 	UDT::getsockopt(fd, 0, UDT_SNDTIMEO, &block[4], &size);
-	cout << "UDT_SNDTIMEO = "<< block[4] << endl;
+	CUDPBlast* cchandle = NULL;
+	int temp;
+	UDT::getsockopt(fd, 0, UDT_CC, &cchandle, &temp);
+	if (NULL != cchandle) {
+		int rate =800;
+		cchandle->setRate(rate);
+		cout << "set snd rate as " << rate << "Mbps"<< endl;
+	}
+
+	cout << "UDT_SNDTIMEO = "<< block[4] << endl << "UDT_CC = " << cchandle << endl;
 	return;
 }
 

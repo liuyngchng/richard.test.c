@@ -90,3 +90,29 @@ set output "cwnd.png"
 plot "cwnd.dat" using 1:2 title 'BW=1Gbps, Delay=50ms SndRate=500Mbps Congestion Window' with linespoints
 exit
 ```
+
+## 2.7 NetAnim
+
+```
+cd /ns-allinone-xxx
+cd /netanim-xxx
+make clean
+qmake NetAnim.pro
+make
+./NetAnim
+
+```
+
+add head in *.cc file  
+
+```  
+include "ns3/netanim-module.h"
+```  
+
+add code snippet before Simulation::Run();
+```
+AnimationInterface anim ("anim1.xml"); 
+anim.SetConstantPosition(nodes.Get(0), 1.0, 2.0); 
+anim.SetConstantPosition(nodes.Get(1), 2.0, 3.0);
+```
+run your script and then open file "anim1.xml" in NetAnim
