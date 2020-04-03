@@ -119,7 +119,7 @@ $ gcc main.c -o main.out -L/usr/lib -lm
 ```
 可以使用多个`-L`选项，或者在一个`-L`选项内使用冒号分割的路径列表
 - `LIBRARYPATH`  
-把包括所需链接库的目录加到环境变量 `LIBRARYPATH` 中
+把包括所需链接库的目录加到环境变量 `LIBRARY_PATH` 中
 
 生成自定义的archieve文件
 ```
@@ -146,26 +146,38 @@ $gcc -fPIC -shared func.c -o libfunc.so
 ```
 从目标文件生成动态链接库
 ```
-$ gcc -fPIC -c func.c -o func.o
-$ gcc -shared func.o -o libfunc.so
+gcc -fPIC -c func.c -o func.o
+gcc -shared func.o -o libfunc.so
 ```
 `-fPIC` 选项作用于编译阶段，在生成目标文件时就得使用该选项，以生成位置无关的代码  
 
 ## 8.2 Compile with `.so` file  
+
 如果希望将一个动态链接库链接到可执行文件，那么需要在命令行中列出动态链接库的名称，具体方式和普通的源文件、目标文件一样  
+
 ```
-$ gcc main.c libfunc.so -o app.out
+gcc main.c libfunc.so -o app.out
 ```
 还可以这样加载  
 ```
-$gcc main.c -L. -lfunc -o app.out
+gcc main.c -L. -lfunc -o app.out
 ```
-## 8.3 Run with `.so` file
+
+还可以在编译时链接库环境变量 `LIBRARY_PATH` 中添加so文件的路径，然后执行
+
+```
+gcc main.c -lfunc -o app.out
+```
+
+编译器会自动在 `LIBRARY_PATH`中查找动态链接文件libfunc.so  
+
+## 8.3 Run with `.so` file  
+
 编译完之后，必须要确保程序在运行时可以找到这个动态链接库，可以采用以下几种方法中的一种   
 * 你可以将链接库放到标准目录下，例如 /usr/lib   
-*  设置一个合适的环境变量，例如 LIBRARY_PATH。  
+* 为运行时设置一个合适的环境变量，例如 LD_LIBRARY_PATH。  
 ```
-export LIBRARY_PATH='xxxx'
+export LD_LIBRARY_PATH='xxxx'
 ```
 * 不同系统，具有不同的加载链接库的方法, ubuntu 和 centos下，  
   执行 `sudo vim /etc/ld.so.conf`,  或者  
