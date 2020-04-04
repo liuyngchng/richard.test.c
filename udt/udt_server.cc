@@ -13,6 +13,7 @@
 
 using namespace std;
 
+void* rcvdata(void *);
 void config_socket_opt(UDTSOCKET sockfd);
 
 int main(int argc, char* argv[])
@@ -27,6 +28,7 @@ int main(int argc, char* argv[])
 		sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
 		cout << "streaming mode" << endl;
 	} else {
+
 		sockfd = UDT::socket(AF_INET, SOCK_DGRAM, 0);
 		cout << "message mode" << endl;
 	}
@@ -54,30 +56,40 @@ int main(int argc, char* argv[])
 		char ip[16];
 		cout << "con from: " << inet_ntoa(their_addr.sin_addr) 
 			 << ":" << ntohs(their_addr.sin_port) << endl;
-		char buf[_BUF_SIZE_];
-		int rsize;
-		while (1) {
-			memset(buf, 0, sizeof(buf));
-			if (_MODE_ == 1) {
-				rsize = UDT::recv(rcv_sockfd, buf, sizeof(buf), 0);
-			} else {
-				rsize = UDT::recvmsg(rcv_sockfd, buf, sizeof(buf));
-			}
-			if (UDT::ERROR == rsize) {
-				cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
-				return 1;
-			}
-			if (strlen(buf)==0) {
-				cout << "rec finished." << endl;
-				break;
-			} else {
-				//cout << "len: " << strlen(buf) << endl;
-			}
-		}
-		UDT::close(rcv_sockfd);
+		//rcvdata(rcv_sockfd);
+		pthread_t rcvthread;
+		pthread_create(&rcvthread, NULL, rcvdata, new UDTSOCKET(rcv_sockfd));
+		pthread_detach(rcvthread);
 	}
 	UDT::close(sockfd);
 	return 0;
+}
+
+void* rcvdata(void* sockfd)
+{
+	UDTSOCKET fd = *(UDTSOCKET*) sockfd;
+	char buf[_BUF_SIZE_];
+	int rsize;
+	while (1) {
+		memset(buf, 0, sizeof(buf));
+		if (_MODE_ == 1) {
+			rsize = UDT::recv(fd, buf, sizeof(buf), 0);
+		} else {
+			rsize = UDT::recvmsg(fd, buf, sizeof(buf));
+		}
+		if (UDT::ERROR == rsize) {
+			cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
+			return NULL;
+		}
+		if (strlen(buf)==0) {
+			cout << "rec finished." << endl;
+			break;
+		} else {
+			//cout << "len: " << strlen(buf) << endl;
+		}
+	}
+	UDT::close(fd);
+	return NULL;
 }
 
 void config_socket_opt(UDTSOCKET fd)
