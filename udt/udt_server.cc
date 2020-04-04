@@ -9,7 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #define _BUF_SIZE_ 8096
-#define _MODE_ 2			// 1:stream, 2:message
+#define _MODE_ 1			// 1:stream, 2:message
 
 using namespace std;
 
@@ -97,16 +97,8 @@ void config_socket_opt(UDTSOCKET fd)
 	cout << "start config socket option." << endl;
 	int bdp = 100000;	//1000Mbps*1ms=1000Mb*10^-3=1Mb=10^6b=0.1^10^6B=100000B
 	int a = 25000;
-	UDT::setsockopt(fd, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
-    // UDT::setsockopt(fd, 0, UDT_FC, &a, sizeof(int));
-	CUDPBlast* cchandle = NULL;
-    int temp;
-    UDT::getsockopt(fd, 0, UDT_CC, &cchandle, &temp);
-    if (NULL != cchandle) {
-        int rate =800;
-        cchandle->setRate(rate);
-        cout << "set snd rate as " << rate << "Mbps"<< endl;
-    }
-	cout << "UDT_CC = "<< cchandle << endl;
+	int result = UDT::setsockopt(fd, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
+    cout << "set UDT_CC return " << result << endl;
+	// UDT::setsockopt(fd, 0, UDT_FC, &a, sizeof(int));
 	return; 
 }

@@ -10,12 +10,14 @@
 #include <string.h>
 #include <stdlib.h>
 #define _BUF_SIZE_ 8092
-#define _MODE_ 2			  // 1:streaming , 2:msg 
+#define _MODE_ 1			  	// 1:streaming , 2:msg
+#define _SND_RATE_ 800			// send rate as 800Mbps
 using namespace std;
 using namespace UDT;
 
 void config_socket_opt(UDTSOCKET sockfd);
 bool check_debug_mode(int argc, char* argv[]);
+bool setSndRate(UDTSOCKET fd, int rate);
 
 int main(int argc, char* argv[])
 {
@@ -52,6 +54,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	cout << "connected to " << ip << ":" << port << endl;
+	setSndRate(sockfd, _SND_RATE_);
 	int count = 0;
 	int ss;
 	while (count < 10000000) {
@@ -105,18 +108,24 @@ void config_socket_opt(UDTSOCKET fd)
 	int bdp = 100000;	//1000Mbps*1ms=1000Mb*10^-3=1Mb=10^6b=0.1^10^6B=100000B
 	int a = 10000;
 	UDT::setsockopt(fd, 0, UDT_SNDTIMEO, &a, sizeof(int));
-//	UDT::setsockopt(fd, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
+	int re = UDT::setsockopt(fd, 0, UDT_CC, new CCCFactory<CUDPBlast>, sizeof(CCCFactory<CUDPBlast>));
 	UDT::getsockopt(fd, 0, UDT_SNDTIMEO, &block[4], &size);
-	CUDPBlast* cchandle = NULL;
-	int temp;
-	UDT::getsockopt(fd, 0, UDT_CC, &cchandle, &temp);
-	if (NULL != cchandle) {
-		int rate =800;
-		cchandle->setRate(rate);
-		cout << "set snd rate as " << rate << "Mbps"<< endl;
-	}
-
-	cout << "UDT_SNDTIMEO = "<< block[4] << endl << "UDT_CC = " << cchandle << endl;
+	cout << "UDT_SNDTIMEO = "<< block[4] << endl << "set UDT_CC return " << re << endl;
 	return;
 }
 
+bool setSndRate(UDTSOCKET fd, int rate)
+{
+	bool result = false;
+	CUDPBlast* cchandle = NULL;
+	int temp;
+	UDT::getsockopt(fd, 0, UDT_CC, &cchandle, &temp);
+	if (NULL == cchandle) {
+		cout << "cchandle is null" << endl;
+	} else {
+		cchandle->setRate(rate);
+		cout << "set snd rate as " << rate << "Mbps"<< endl;
+		result = true;
+	}
+	return result;
+}
