@@ -1,0 +1,116 @@
+{
+    "application": {
+        "dpctl": "",
+        "ipBase": "10.0.0.0/8",
+        "netflow": {
+            "nflowAddId": "0",
+            "nflowTarget": "",
+            "nflowTimeout": "600"
+        },
+        "openFlowVersions": {
+            "ovsOf10": "1",
+            "ovsOf11": "0",
+            "ovsOf12": "0",
+            "ovsOf13": "0"
+        },
+        "sflow": {
+            "sflowHeader": "128",
+            "sflowPolling": "30",
+            "sflowSampling": "400",
+            "sflowTarget": ""
+        },
+        "startCLI": "0",
+        "switchType": "ovs",
+        "terminalType": "xterm"
+    },
+    "controllers": [],
+    "hosts": [
+        {
+            "number": "3",
+            "opts": {
+                "hostname": "h3",
+                "nodeNum": 3,
+                "sched": "host"
+            },
+            "x": "394.0",
+            "y": "376.0"
+        },
+        {
+            "number": "5",
+            "opts": {
+                "hostname": "h4",
+                "nodeNum": 5,
+                "sched": "host"
+            },
+            "x": "492.0",
+            "y": "383.0"
+        },
+        {
+            "number": "1",
+            "opts": {
+                "hostname": "h1",
+                "nodeNum": 1,
+                "sched": "host"
+            },
+            "x": "120.0",
+            "y": "377.0"
+        },
+        {
+            "number": "2",
+            "opts": {
+                "hostname": "h2",
+                "nodeNum": 2,
+                "sched": "host"
+            },
+            "x": "274.0",
+            "y": "376.0"
+        }
+    ],
+    "links": [
+        {
+            "dest": "s2",
+            "opts": {
+                "bw": 1000,
+                "delay": "10ms"
+            },
+            "src": "h3"
+        },
+        {
+            "dest": "h4",
+            "opts": {
+                "bw": 1000,
+                "delay": "50ms"
+            },
+            "src": "s2"
+        },
+        {
+            "dest": "s2",
+            "opts": {
+                "bw": 1000
+            },
+            "src": "h1"
+        },
+        {
+            "dest": "s2",
+            "opts": {
+                "bw": 1000,
+                "delay": "1ms"
+            },
+            "src": "h2"
+        }
+    ],
+    "switches": [
+        {
+            "number": "2",
+            "opts": {
+                "controllers": [],
+                "hostname": "s2",
+                "nodeNum": 2,
+                "switchType": "legacySwitch"
+            },
+            "x": "340.0",
+            "y": "173.0"
+        }
+    ],
+    "version": "2"
+}

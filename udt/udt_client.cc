@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #define _BUF_SIZE_ 8092
 #define _MODE_ 1			  	// 1:streaming , 2:msg
-#define _SND_RATE_ 800			// send rate as 800Mbps
+#define _SND_RATE_ 400			// send rate as 800Mbps
 using namespace std;
 using namespace UDT;
 
