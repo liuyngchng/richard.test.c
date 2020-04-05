@@ -8,11 +8,11 @@ end to end network as table below:
 
 | No| From  | To | Delay(ms) | Bandwidth(Mbps) |   
 | --| -- | -- | -- | -- |  
-| 1 | h1 | h2 | 2 | 1000 |   
-| 2 | h1 | h5 | 20 | 1000 |  
-| 3 | h1 | h9 | 30 | 1000 |  
-| 4 | h1  | h13 | 40 | 1000 |  
-| 5 | h1 | h17 | 50 | 1000 |  
+| 1 | h1(10.0.0.1) | h2(10.0.0.2) | 2 | 1000 |   
+| 2 | h1(10.0.0.1) | h5(10.0.0.5) | 20 | 1000 |  
+| 3 | h1(10.0.0.1) | h9(10.0.0.9) | 30 | 1000 |  
+| 4 | h1(10.0.0.1) | h13(10.0.0.13) | 40 | 1000 |  
+| 5 | h1(10.0.0.1) | h17(10.0.0.17) | 50 | 1000 |  
 
 # 2. TCP Fairness  
 setup 5 concurrent flow, traffic distribution as following  
