@@ -28,21 +28,8 @@ throughput faireness details as below
 | 4  | 40 | 127 |  
 | 5 | 50 | 129 |   
 
-2ms  
-![./tcp/2ms.png](./tcp/2ms.png)  
-
-20ms  
-![./tcp/20ms.png](./tcp/20ms.png)  
-
-30ms  
-![./tcp/30ms.png](./tcp/30ms.png)  
-
-40ms  
-![./tcp/40ms.png](./tcp/40ms.png)  
-
-50ms  
-![./tcp/50ms.png](./tcp/50ms.png)  
-
+流量对比示意图如下图所示  
+![./tcp/tcp_fairness.png](./tcp/tcp_fairness.png)  
 
 # 3. UDT Fairness
 
@@ -59,20 +46,8 @@ throughput faireness details as below
 | 4  | 40 | 167 | 28 |  
 | 5 | 50 | 161 | 31 |   
 
-2ms  
-![./udt/2ms.png](./udt/2ms.png)  
-
-20ms  
-![./udt/20ms.png](./udt/20ms.png)  
-
-30ms  
-![./udt/30ms.png](./udt/30ms.png)  
-
-40ms  
-![./udt/40ms.png](./udt/40ms.png)  
-
-50ms  
-![./udt/50ms.png](./udt/50ms.png)  
+流量对比示意图如下图所示  
+![./udt/udt_fairness.png](./udt/udt_fairness.png) 
 
 # 4. conclusion
 
