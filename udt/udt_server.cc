@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #define _BUF_SIZE_ 8096
 #define _MODE_ 1			// 1:stream, 2:message
+#define _BACKLOG_ 10;
 
 using namespace std;
 
@@ -46,12 +47,12 @@ int main(int argc, char* argv[])
 		return 0;
 	}
 
-	UDT::listen(sockfd, 10);
+	UDT::listen(sockfd, _BACKLOG_);
 	cout << "listening port " << port << endl;
 	int namelen;
 	sockaddr_in their_addr;
 	while (1) {
-		namelen=0;
+		namelen = 0;
 		UDTSOCKET rcv_sockfd = UDT::accept(sockfd, (sockaddr*)&their_addr, &namelen);
 		char ip[16];
 		cout << "con from: " << inet_ntoa(their_addr.sin_addr) 

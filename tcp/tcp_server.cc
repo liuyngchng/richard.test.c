@@ -21,6 +21,7 @@
 #include "time.h"
 #include <iostream>
 #include <signal.h>
+#include <typeinfo>
 #define _BACKLOG_ 10
 #define _BUF_SIZE_ 8096
 
@@ -41,10 +42,10 @@ int main(int argc, char* argv[])
 	}
 	debug = check_debug_mode(argc, argv);
 	int port = atoi(argv[1]);
-	int sockfd = socket(AF_INET, SOCK_STREAM,0);
+	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
-		cout << get_time() <<"socket error, errno is " << errno 
-			 <<", errstring is " <<  strerror(errno) << endl;
+		cout << get_time() <<"socket error, " << errno 
+		<<", " <<  strerror(errno) << endl;
 	}
 	struct sockaddr_in server_sock;
 	bzero(&server_sock, sizeof(server_sock));
@@ -52,25 +53,23 @@ int main(int argc, char* argv[])
 	server_sock.sin_addr.s_addr = htonl(INADDR_ANY);
 	server_sock.sin_port = htons(port);
 	if (bind(sockfd, (struct sockaddr*)&server_sock, 
-		sizeof(struct sockaddr_in))< 0) {
-		cout <<"bind error, errno is " << errno 
-			 << ", errstring is " << strerror(errno) << endl;
+		sizeof(sockaddr_in)) < 0) {
+		cout <<"bind error, " << errno << ", " << strerror(errno) << endl;
 		close(sockfd);
 		return 1;
 	}
-	if (listen(sockfd, _BACKLOG_)< 0) {
-		cout << "listen error, errno is " << errno
-			 << ", errstring is " <<strerror(errno) << endl;
+	if (listen(sockfd, _BACKLOG_) < 0) {
+		cout << "listen error," << errno << "," <<strerror(errno) << endl;
 		close(sockfd);
 		return 2;
 	}
 	cout << "listening:" << port << endl;
-	sockaddr_in client_sock;
+	sockaddr_in csock;
 	socklen_t len;
 	int cfd;
 	while (1) {
 		len = 0;
-	 a: cfd = accept(sockfd, (sockaddr*)&client_sock, &len);
+	 a: cfd = accept(sockfd, (sockaddr*)&csock, &len);
 		if (cfd < 0) {
 			if((errno == ECONNABORTED) || errno == EINTR) {
 				goto a;
@@ -81,8 +80,10 @@ int main(int argc, char* argv[])
 		}
 		//char buf_ip[INET_ADDRSTRLEN];
 		//memset(buf_ip, 0, sizeof(buf_ip));
-		//inet_ntop(AF_INET, &client_sock.sin_addr, buf_ip, sizeof(buf_ip));
-		cout << "con from " << inet_ntoa(client_sock.sin_addr) << ":" << ntohs(client_sock.sin_port) << endl;
+		//inet_ntop(AF_INET, &csock.sin_addr, buf_ip, sizeof(buf_ip));
+		cout << len << ":"<< typeid(csock).name() << ":" << csock.sin_addr.s_addr << endl;
+		cout <<"con from " << inet_ntoa(csock.sin_addr) 
+			 << ":" << ntohs(csock.sin_port) << endl;
 		//rcvdata(&cfd);
 		pthread_t t;
 		pthread_create(&t, NULL, &rcvdata, &cfd);
