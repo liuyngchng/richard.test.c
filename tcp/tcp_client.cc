@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 	bool debug = check_debug_mode(argc, argv);
 	char *ip = argv[1];
 	int port = atoi(argv[2]);
-	cout << "client will connect to server" << ip << ":" << port << endl;
+	cout << "con to " << ip << ":" << port << endl;
 	char buf_init[]="hello,this is a test";
 	char buf[_BUF_SIZE_];
 	for(int i=0;i<sizeof(buf);i++) {
@@ -44,8 +44,7 @@ int main(int argc, char *argv[])
 	struct sockaddr_in srv_sock;
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
-		cout << "socket error, errno is" << errno 
-			 << "errstring is" << strerror(errno) << endl;
+		cout << "error," << errno << ", " << strerror(errno) << endl;
 	}
 	bzero(&srv_sock, sizeof(srv_sock));
 	srv_sock.sin_family = AF_INET;
@@ -61,12 +60,12 @@ int main(int argc, char *argv[])
 	}
 	cout << "connected to " << ip << ":"<< port << endl;
 	//buf[strlen(buf)-1]='\0';
-	int count = 10000000;
-	while (count>0) {
+	int count = 0;
+	while (count < 1000000) {
 		//write(sockfd, buf, strlen(buf));
 		int ss = send(sockfd, buf, strlen(buf), 0);
 		if(debug) {
-			cout << count-- << " snd " << ss << endl;
+			cout << count++ << " snd " << ss << endl;
 		}
 	   //break;
 	   //sleep(1);
@@ -88,7 +87,7 @@ bool check_debug_mode(int argc, char* argv[])
 		for(int i=0; i< argc; i++) {
 			if(strncasecmp(argv[i], "-d", 2)==0) {
 				debug = true;
-				cout << "in debug mode" << endl;
+				cout << "debug mode" << endl;
 			}
 		}
 	}

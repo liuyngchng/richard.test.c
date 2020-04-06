@@ -29,17 +29,14 @@ using namespace std;
 const char *inet_ntop(int af, const void *src,char *dst, socklen_t size);
 char* get_time();
 void catch_child(int signo);
-void* rcvdata(void *);
-bool check_debug_mode(int argc, char* argv[]);
 int ret;
-bool debug;
 int main(int argc, char* argv[])
 {
-	if (argc < 2) {
+	if (argc != 2) {
 		cerr <<"pls input listening port" << endl;
 		return 1;
 	}
-	debug = check_debug_mode(argc, argv);
+	bool debug = false;
 	int port = atoi(argv[1]);
 	int sockfd = socket(AF_INET, SOCK_STREAM,0);
 	if (sockfd < 0) {
@@ -64,36 +61,50 @@ int main(int argc, char* argv[])
 		close(sockfd);
 		return 2;
 	}
-	cout << "listening:" << port << endl;
-	sockaddr_in client_sock;
+	cout << "bind and listen port:" << port 
+		 << " success, waiting accept..." << endl;
+	struct sockaddr_in client_sock;
 	socklen_t len;
 	int cfd;
 	while (1) {
 		len = 0;
-	 a: cfd = accept(sockfd, (sockaddr*)&client_sock, &len);
+	 a: cfd = accept(sockfd, (struct sockaddr*)&client_sock,&len);
 		if (cfd < 0) {
 			if((errno == ECONNABORTED) || errno == EINTR) {
 				goto a;
 			} else {
-				cout << "accept  error, " << errno << "," << strerror(errno) << endl;
+				cout << "accept  error, errno is " << errno
+					 << ", errstring is " << strerror(errno) << endl;
 				return -1;
 			}
 		}
-		//char buf_ip[INET_ADDRSTRLEN];
-		//memset(buf_ip, 0, sizeof(buf_ip));
-		//inet_ntop(AF_INET, &client_sock.sin_addr, buf_ip, sizeof(buf_ip));
-		cout << "con from " << inet_ntoa(client_sock.sin_addr) << ":" << ntohs(client_sock.sin_port) << endl;
-		//rcvdata(&cfd);
-		pthread_t t;
-		pthread_create(&t, NULL, &rcvdata, &cfd);
-		pthread_detach(t);
-	}
-	return 0;
-}
+		pid_t pid = fork();
+		if (pid < 0) {
+			cout << "fork error" << endl;
+			return -2;
 
-void* rcvdata(void* sockfd)
-{
-	int cfd = *(int*)sockfd;
+		} else if (pid==0) {
+			// child process
+			close(sockfd);
+			break;
+		} else {
+			struct sigaction act;
+			act.sa_handler = catch_child;
+			sigemptyset(&act.sa_mask);
+			act.sa_flags = 0;
+			ret = sigaction(SIGCHLD, &act, NULL);
+			if (ret != 0) {
+				cout << "sigaction error" << endl;
+			}
+			close(cfd);
+			continue;
+		}
+	}
+	char buf_ip[INET_ADDRSTRLEN];
+	memset(buf_ip, 0, sizeof(buf_ip));
+	inet_ntop(AF_INET, &client_sock.sin_addr, buf_ip, sizeof(buf_ip));
+	cout << "get connection :ip is " << buf_ip
+		 << " port is " << ntohs(client_sock.sin_port) << endl;
 	char buf[_BUF_SIZE_];
 	while (1) {
 		memset(buf, 0, sizeof(buf));
@@ -104,28 +115,14 @@ void* rcvdata(void* sockfd)
 			break;
 		}
 		if (debug) {
-			cout << "rcv " << strlen(buf) << endl;
+			cout << "rcv from " << buf_ip << " : " << strlen(buf) << endl;
 		}
 	}
 	//fflush(stdout);
-	return NULL;
+	return 0;
 }
 
 void catch_child(int signo) 
 {
 	cout << "child task finished" << endl;	  
-}
-
-bool check_debug_mode(int argc, char* argv[])
-{
-    bool debug =false;
-    if (argc == 3) {
-        for(int i=0; i< argc; i++) {
-            if(strncasecmp(argv[i], "-d", 2)==0) {
-                debug = true;
-                cout << "debug mode" << endl;
-            }
-        }
-    }
-    return debug;
 }
