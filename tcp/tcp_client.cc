@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 	cout << "connected to " << ip << ":"<< port << endl;
 	//buf[strlen(buf)-1]='\0';
 	int count = 0;
-	while (count < 1000000) {
+	while (count < 10000000) {
 		//write(sockfd, buf, strlen(buf));
 		int ss = send(sockfd, buf, strlen(buf), 0);
 		if(debug) {
