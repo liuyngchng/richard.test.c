@@ -65,10 +65,9 @@ int main(int argc, char* argv[])
 	}
 	cout << "listening:" << port << endl;
 	sockaddr_in csock;
-	socklen_t len;
+	socklen_t len = sizeof(csock);
 	int cfd;
 	while (1) {
-		len = 0;
 	 a: cfd = accept(sockfd, (sockaddr*)&csock, &len);
 		if (cfd < 0) {
 			if((errno == ECONNABORTED) || errno == EINTR) {
@@ -81,8 +80,9 @@ int main(int argc, char* argv[])
 		//char buf_ip[INET_ADDRSTRLEN];
 		//memset(buf_ip, 0, sizeof(buf_ip));
 		//inet_ntop(AF_INET, &csock.sin_addr, buf_ip, sizeof(buf_ip));
-		cout << len << ":"<< typeid(csock).name() << ":" << csock.sin_addr.s_addr << endl;
-		cout <<"con from " << inet_ntoa(csock.sin_addr) 
+		//cout << "con from " << buf_ip << ":" << ntohs(csock.sin_port) << endl;
+		//cout << len << ":" << typeid(csock).name() << ":" << csock.sin_addr.s_addr << endl;
+		cout << "con from " << inet_ntoa(csock.sin_addr) 
 			 << ":" << ntohs(csock.sin_port) << endl;
 		//rcvdata(&cfd);
 		pthread_t t;
