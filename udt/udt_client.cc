@@ -1,6 +1,6 @@
 /**
   g++ -o _udt_client udt_client.cc	/home/rd/so/libudt.so -lpthread
-  ./_udt_client 10.0.0.1 9000 > /dev/null 2>&1 &
+  ./_udt_client 10.0.0.1 9000 800 -d > /dev/null 2>&1 &
   ifstat > tp.dat &
  **/
 #include <iostream>
@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #define _BUF_SIZE_ 8092
 #define _MODE_ 1			  	// 1:streaming , 2:msg
-#define _SND_RATE_ 400			// send rate as 800Mbps
+//#define _SND_RATE_ 400			// send rate as 800Mbps
 using namespace std;
 using namespace UDT;
 
@@ -21,13 +21,14 @@ bool setSndRate(UDTSOCKET fd, int rate);
 
 int main(int argc, char* argv[])
 {
-	if (argc < 3) {
-		cerr << "pls input server IP and port separate by blank space" << endl;
+	if (argc < 4) {
+		cerr << "pls input server IP  port sndRate" << endl;
 		return 1;
 	}
 	bool debug = check_debug_mode(argc, argv);
 	char *ip = argv[1];
 	int port = atoi(argv[2]);
+	int sndRate = atoi(argv[3]);
 	char buf_init[]="hello,this is a test";
 	char buf[_BUF_SIZE_];
 	for (int i=0; i<sizeof(buf); i++) {
@@ -54,7 +55,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	cout << "connected to " << ip << ":" << port << endl;
-	setSndRate(sockfd, _SND_RATE_);
+	setSndRate(sockfd, sndRate);
 	int count = 0;
 	int ss;
 	while (count < 10000000) {
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
 bool check_debug_mode(int argc, char* argv[])
 {
 	bool debug =false;
-	if (argc == 4) {
+	if (argc >= 4) {
 		for (int i = 0; i < argc; i++) {
 			if (strcmp(argv[i], "-d")==0) {
 				debug = true;

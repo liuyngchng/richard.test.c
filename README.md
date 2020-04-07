@@ -22,5 +22,5 @@ plot 'data.csv' using 1:2 title '50ms' ,'' using 1:3 title '40ms', '' using 1:4 
 ## 3. throughput
 
 ```
-ifstat -nw
+ifstat -nwbt
 ```
