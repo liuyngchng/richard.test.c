@@ -1,6 +1,6 @@
 # 1. Context
 
-验证同样的带宽，在一个背景流量已经占用的情况下，后启动的业务是否能够获取到流量
+验证在1Gbps的带宽条件下，在存在背景流量的情况下，后启动的流量需求是否能够得到满足，以及不同延迟条件下获取到流量的公平性  
 
 # 2. topo
 ## 2.1 同等网络延迟拓扑
@@ -9,7 +9,7 @@
 ![connect.png](./connect.png)  
 <center> 图 2-1 同等网络延迟拓扑 </center>
 
-## 2.2 不同网路哦延迟拓扑
+## 2.2 不同网络延迟拓扑
  5台客户端，5台服务端，在客户端和服务端中间共享一条链路，如下图所示
  ![connect1.png](./connect1.png)  
  <center> 图 2-2 不同网络延迟拓扑 </center>
@@ -30,13 +30,13 @@
 | 4 | s1 | s2 | 1Gbps | 30ms | 922 |  
 
 分别在 h4-h1, h5-h2, h6-h3之间建立3个TCP流，3个流占用的带宽如下图所示  
-![TCP_3channel_50ms.png](./tcp/TCP_3channel_50ms.png)
+![TCP_3channel_delay_50ms.png](./tcp/TCP_3channel_delay_50ms.png)
 
 ## 3.2 UDT  
 
 设定带宽及延迟,以及平均吞吐量如下表所示  
 
-| No | From | To | Bandwidth | Delay | Throughput_AVG |   
+| No | From | To | Bandwidth | Delay | Throughput_AVG(Mbps) |   
 | -- | -- | -- | -- | -- |  
 | 1 | h1 | h4 | 1Gbps | 50ms | 91.6 |  
 | 2 | h2 | h5 | 1Gbps | 50ms | 90.1 |  
@@ -44,7 +44,7 @@
 | 4 | s1 | s2 | 1Gbps | 30ms | 272.9 |  
 
 分别在 h4-h1, h5-h2, h6-h3之间建立3个 UDT流，每个UDT的发送速率设置为800Mbps，3个流占用的带宽如下图所示  
-![TCP_3channel_50ms.png](./udt/UDT_3channel_50ms.png)
+![UDT_3channel_delay_50ms.png](./udt/UDT_3channel_delay_50ms.png)
 
 # 4. 不同延迟条件下带宽分配  
 
