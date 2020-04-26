@@ -17,6 +17,8 @@ set label 2 "time(s)" at 10,91000    // set  label
 plot "a.dat" using 1:2 title 'line1 ' ,'' using 1:3 title "line2"  with linespoints # 使用文件a.dat的第1列和第2列作为X轴和Y轴数据，示例名"line1",使用a.dat的第1列和第3列作为X轴和Y轴数据，示例名为"line2"，
 exit
 plot 'data.csv' using 1:2 title '0ms' ,'' using 1:3 title '10ms', '' using 1:4 title '20ms', '' using 1:5 title '30ms', '' using 1:6 title '40ms', '' using 1:7 title '50ms', '' using 1:8 title '100ms'
+set xrange [0:100]					# x 坐标的范围是 0 到 100 
+set yrange [0:800000]				# y 坐标的范围是 0 到 800000
 ```
 
 ## 3. throughput
