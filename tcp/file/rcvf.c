@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 		strncpy(file_len, buf, sizeof(file_len));
 		strncpy(file_name, buf+sizeof(file_len), sizeof(file_name));
 		printf("rcv file:[%s] size:[%s] \n", file_name, file_len);
-		sprintf(buf, "rcv-%s", file_name);
+		sprintf(buf, "rcv_%s", file_name);
 		int fd = open(buf, O_RDWR | O_CREAT | O_TRUNC, 0666);
 		int size = atoi(file_len);
 		int write_len = 0;
