@@ -16,7 +16,7 @@
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		printf("./recv port\n");
+		printf("pls input port\n");
 		return -1;
 	}
 	
@@ -32,49 +32,44 @@ int main(int argc, char *argv[])
 	local_addr.sin_addr.s_addr = INADDR_ANY;
 	int ret = bind(sockfd, (struct sockaddr *)&local_addr, sizeof(local_addr));
 	if (ret == -1) {
-		perror("bind  failed\n");
+		perror("bind failed\n");
 		return -1;
 	}
 	
 	ret = listen(sockfd, 5);
 	if (ret == -1) {
-		perror("listen is fail\n");
+		perror("listen failed\n");
 		return -1;
 	}
 	
 	struct sockaddr_in client_addr = {0};
 	int len = sizeof(client_addr);
-	printf("server is running\n");
+	printf("rcvf srv is running\n");
 	
 	int c_sockfd = 0;
-	
 	while (1) {
 		c_sockfd = accept(sockfd, (struct sockaddr *)&client_addr, &len);
 		if (c_sockfd < 0) {
 			perror("accept error\n");
 			continue;
 		}
-		
-		printf("client connected [%s:%d]\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-				
+		printf("client [%s:%d] connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 		char file_len[16] = {0};
 		char file_name[128] = {0};
 		char buf[1024] = {0};
 		read(c_sockfd, buf, sizeof(buf));
-		
 		strncpy(file_len, buf, sizeof(file_len));
 		strncpy(file_name, buf+sizeof(file_len), sizeof(file_name));
-		printf("rcv file name:[%s] size:[%s] \n", file_name, file_len);
+		printf("rcv file:[%s] size:[%s] \n", file_name, file_len);
 		sprintf(buf, "rcv-%s", file_name);
 		int fd = open(buf, O_RDWR | O_CREAT | O_TRUNC, 0666);
 		int size = atoi(file_len);
 		int write_len = 0;
-		
 		while (1) {
 			bzero(buf, 1024);
 			ret = read(c_sockfd, buf, sizeof(buf));
-			if ( ret <= 0) {
-				printf("\n [recv-%s] rcv file done\n", file_name);
+			if (ret <= 0) {
+				printf("\nrcv file [rcv_%s] done\n", file_name);
 				break;
 			}
 			write(fd, buf, ret);
@@ -83,7 +78,6 @@ int main(int argc, char *argv[])
 		}
 		break;
 	}
-	
 	close(c_sockfd);
 	close(sockfd);
 	return 0;

@@ -17,7 +17,7 @@
 int main(int argc, char * argv[])
 {
 	if (argc != 3) {
-		printf("请输入文件接收方的IP、端口号\n");
+		printf("pls input rcvf server ip and port\n");
 		return -1;
 	}
 	
@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
 	
 	int tcp_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (tcp_socket == -1) {
-		perror("create socketfd is fail\n");
+		perror("create socketfd failed\n");
 		return -1;
 	}
 	
@@ -41,11 +41,11 @@ int main(int argc, char * argv[])
 		return -1;
 	}
 	
-	printf("\nConnect succeed!\n");
+	printf("\nconnect succeed!\n");
 	char file_path[128] = {0};
 	char file_info[2048] = {0};
 	char buf[1024] = {0};
-	printf("Please enter file path: ");
+	printf("pls input file path: ");
 	scanf("%s", file_path);
 	char file_name[128] = {0};
 	strncpy(file_name, basename(file_path), sizeof(file_name));
@@ -64,12 +64,12 @@ int main(int argc, char * argv[])
 		bzero(buf, sizeof(buf));
 		ret = read(fd, buf, sizeof(buf));
 		if (ret <= 0) {
-			printf("send file[%s] succeed\n", file_name);
+			printf("snd file [%s] succeed\n", file_name);
 			break;
 		}
 		write(tcp_socket, buf, ret);
 		send_len += ret;
-		printf("uploading %.2f%%\n", (float)send_len/len * 100);
+		printf("snd %.2f%%\n", (float)send_len/len * 100);
 	}
 	close(fd);
 	close(tcp_socket);
