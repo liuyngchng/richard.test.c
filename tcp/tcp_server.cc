@@ -2,6 +2,9 @@
    
    g++ -o _tcp_server tcp_server.cc /home/rd/so/libmytime.so
    ./_tcp_server > /dev/null 2>&1 &   
+
+   sudo tcpdump -i lo -c20000 tcp port 8080 -w ./test.pcap
+   
    * runtime need to ldconfig let so file can be load.
   > File Name:	tcp_server.c
   > Author:		richard
