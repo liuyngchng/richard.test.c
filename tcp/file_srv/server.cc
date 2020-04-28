@@ -22,8 +22,8 @@
 using namespace std;
 
 // declaration.
-int save_f(char file_name[], int acceptfd); 		//save stream in acceptfd to file
-int snd_f(char file_name[],int acceptfd);			//send file content to stream acceptfd
+int save_f(char file_name[], int sockfd); 		//save stream in sockfd to file
+int snd_f(char file_name[],int sockfd);			//send file content to stream sockfd
 
 
 int main(int argc, char** argv){
@@ -86,18 +86,15 @@ int main(int argc, char** argv){
 }
 
 /**
- * save file content from stream represented by acceptfd
+ * save file content from stream represented by sockfd
  * to file name file_name.
 **/
-int save_f(char file_name[], int acceptfd)
+int save_f(char file_path[], int sockfd)
 {
-	//f_file myfile; 
-	//ofstream of("bbb.txt",ios::out|ios::app);
-
-	char part_file[FILE_SIZE] = {0};
-	get_file_name(file_name, part_file); 
+	char file_name[FILE_SIZE] = {0};
+	get_file_name(file_path, file_name); 
 	string path = _PATH_;
-	path += part_file;
+	path += file_name;
 	const char *p = path.c_str();
 	FILE* fp;
 	if ((fp = fopen(p, "a")) == NULL) {
@@ -106,13 +103,9 @@ int save_f(char file_name[], int acceptfd)
 	}
 	int rd_l;
 	char *buf = new char[1500];
-	while ((rd_l = recv(acceptfd, buf, sizeof(buf), 0)) > 0) {
+	while ((rd_l = recv(sockfd, buf, sizeof(buf), 0)) > 0) {
 		int i_len = 0;
-		//memcpy(&myfile.size, buf + i_len, sizeof(int));
-		//myfile.size = (int)ntohl(myfile.size);
 		i_len += sizeof(int);
-
-		//memcpy(&myfile.buf, buf + i_len, myfile.size);
 		if (rd_l > 0)
 			fwrite(buf, sizeof(char), rd_l, fp);
 	}
@@ -121,42 +114,32 @@ int save_f(char file_name[], int acceptfd)
 }
 
 /**
- * send file stream to acceptfd
+ * send file stream to sockfd
  */
-int snd_f(char file_name[], int acceptfd)
+int snd_f(char file_path[], int sockfd)
 {
-	f_file myfile;
 	FILE* fp;
-	string s = _PATH_;
-    s += file_name;
-    const char *file_path = s.c_str();
-	if((fp = fopen(file_path,"rb")) == NULL){
-		cout <<"cannot open file" << endl;
-		return -1;
-	}
-	cout << "open file " << file_path << endl;
-		
-	int length;
-	while ((length = fread(myfile.buf, sizeof(char), BUF_SIZE, fp)) > 0) {
+    if ((fp = fopen(file_path,"rb")) == NULL) {
+        cout << "cannot open file" << endl;
+        return -1;
+    }
+    cout << "open file " << file_path << endl;
 
-		myfile.size = length;
-		char *buffer = new char[1500];
-		int i_len = 0;
-		
-		*(int*)(buffer + i_len) = htonl(myfile.size);
-		i_len += sizeof(int);
-		memcpy(buffer+i_len, myfile.buf, sizeof(myfile.buf));
-		i_len += sizeof(myfile.buf);
-		ssize_t writeLen = snd_buf(acceptfd, buffer, i_len);	
+    int l = 0;
+    int sum_l = 0;
+    char buf[BUF_SIZE] = {0};
+    while (!feof(fp)) {
+        l = fread(buf, sizeof(char), sizeof(buf), fp);
+        sum_l += l;
+        ssize_t w_l = snd_buf(sockfd, buf, l);
+        if (w_l < 0) {
+            cout << "write file failed " << file_path << endl;
+            close(sockfd);
+            return -1;
+        }
+    }
+    cout << "uplaod size " << sum_l << endl;
+    fclose(fp);
+    return 0;
 
-		if (writeLen < 0) {
-			cout << "write failed" << endl;
-			close(acceptfd);
-			return -1;
-		}
-		delete[] buffer;
-	}
-	
-	fclose(fp);
-	return 0;
 }
