@@ -2,11 +2,11 @@
  * some common structure and function used in client and server.
  **/
 #include<iostream>
-#pragma pack(1) 		 	//单字节对齐
-#define BUF_SIZE 1024 		//每次读取文件内容的大小 
-#define NAME_SIZE 128 		//文件名大小 
-#define CMD_SIZE 20 		//输入的操作的数组的大小 
-#define FILE_SIZE 128 		//文件完整路径名的大小 
+#pragma pack(1) 		 		//单字节对齐
+#define BUF_SIZE 1024 			//每次读取文件内容的大小 
+#define NAME_SIZE 128 			//文件名大小 
+#define CMD_SIZE 20 			//输入的操作的数组的大小 
+#define FILE_SIZE 128 			//文件完整路径名的大小 
 
 using namespace std;
 
@@ -15,75 +15,76 @@ using namespace std;
  **/
 struct f_file
 {
-	int size;  				//本次传输大小
-	char buf[BUF_SIZE];  	//文件内容 
+	int size;  					// current transport size
+	char buf[BUF_SIZE];  		// file content 
 }; 
 
 /**
- * 把buf里tLen长度数据发送至i_sockfd，直到发送完毕为止
+ * send buf content limited by t_len to i_sockfd. 
  **/
-int sndf(int i_sockfd, char* buf, size_t tLen)
+int snd_buf(int i_sockfd, char* buf, size_t t_len)
 { 
-	int iThisSend; 			//一次发送了多少数据 
-	unsigned int iSended = 0;	//已经发送了多少 
-	if (tLen == 0)
+	int i_this_snd; 			//一次发送了多少数据 
+	unsigned int i_snd = 0;		//已经发送了多少 
+	if (t_len == 0)
 		return 0;
-	while (iSended < tLen) {
+	while (i_snd < t_len) {
 		do {
-			iThisSend = send(i_sockfd, buf, tLen-iSended, 0);
-		} while ((iThisSend < 0) && (errno == EINTR));		//发送的时候遇到了中断 
-		if (iThisSend < 0)
-			return iSended;
-		iSended += iThisSend;
-		buf += iThisSend;
+			i_this_snd = send(i_sockfd, buf, t_len - i_snd, 0);
+		} while ((i_this_snd < 0) && (errno == EINTR));		//发送的时候遇到了中断 
+		if (i_this_snd < 0)
+			return i_snd;
+		i_snd += i_this_snd;
+		buf += i_this_snd;
 	}
-	return tLen;
+	return t_len;
 } 
 
-int rcvf(int i_sockfd, char* buf, size_t tLen)
+/**
+ * receive stream from i_sockfd to buf limited by t_len
+ */
+int rcv_buf(int i_sockfd, char* buf, size_t t_len)
 {
-	int iThisRead;
-	unsigned int iReaded = 0;
-	if (tLen == 0)
+	int i_this_rd;
+	unsigned int i_rd = 0;
+	if (t_len == 0)
 		return 0;
-	while (iReaded < tLen) {
+	while (i_rd < t_len) {
 		do {
-			iThisRead = read(i_sockfd, buf, tLen-iReaded);
-		} while((iThisRead < 0) && (errno == EINTR));
-		if (iThisRead < 0)
-			return iThisRead;
-		else if (iThisRead == 0)
-			return iReaded;
-		iReaded += iThisRead;
-		buf += iThisRead;
+			i_this_rd = read(i_sockfd, buf, t_len - i_rd);
+		} while((i_this_rd < 0) && (errno == EINTR));
+		if (i_this_rd < 0)
+			return i_this_rd;
+		else if (i_this_rd == 0)
+			return i_rd;
+		i_rd += i_this_rd;
+		buf += i_this_rd;
 	}
 }
 
 /**
- * 将输入的要上传的文件路径分割出文件件名放在c数组中，
- * 例如 /home/rd/test/aaa.txt  c=aaa.txt 
+ * get filename from file full path
 **/
-void get_file_name(char a[], char c[]) 
+void get_file_name(char path[], char name[]) 
 {
 	int i = 0;
-	for ( ; i<strlen(a) - 1 ; i++) {
-		if ((a[i] == '/' && a[i+1] != '/') || (a[i] == '\\' && a[i+1] != '\\'))
+	for ( ; i < strlen(path) - 1 ; i++) {
+		if ((path[i] == '/' && path[i+1] != '/') 
+			|| (path[i] == '\\' && path[i+1] != '\\'))
 			break;
 		else 
-			c[i] = a[i];
-		//cout<<i<<endl;
+			name[i] = path[i];
 	}
-	if (i == strlen(a) - 1) {
-  		//如果文件名里没有\ 或者/
-		c[i] = a[i];
+	if (i == strlen(path) - 1) {
+		name[i] = path[i];
 		return;
 	}	
 	int t = ++i;
-	for ( ; i < strlen(a); i++) {
-		c[i - t] = a[i];
-		c[i + 1] = '\0';
+	for ( ; i < strlen(path); i++) {
+		name[i-t] = path[i];
+		name[i+1] = '\0';
 	}
-	c[i]='\0';
-	//cout<<"c:"<<c<<endl;
+	name[i]='\0';
+	cout << "file name "<< name << endl;
 }
 
