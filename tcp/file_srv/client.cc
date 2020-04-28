@@ -19,13 +19,13 @@
 using namespace std;
 
 // get file name from full path.
-void get_file_name(char full_path[], char file_name[]);
+void get_file_name(const char full_path[], char file_name[]);
 
 // write file stream named file(file full path) to sockfd 
-int snd_f(char file[], int sockfd); 
+int snd_f(const char file[], int sockfd); 
 
 // read file stream from sockfd sockfd and write to file named file
-int save_f(char file[], int sockfd); 
+int save_f(const char file[], int sockfd); 
 
 int main(int argc, char** argv){
 	int cLen = 0;
@@ -54,8 +54,11 @@ int main(int argc, char** argv){
 		if (snd_f(file, sockfd) == 0)
 			cout <<"upload successfully" << endl;	
 	} else if (strcmp(cmd, "get") == 0) {		//download a file from server	
-		snd_buf(sockfd, file,FILE_SIZE);				//send file name to server
-		if (save_f(file, sockfd) == 0) {
+		snd_buf(sockfd, file, FILE_SIZE);				//send file name to server
+		string path = _PATH_;
+		path += file;
+		const char *p = path.c_str();
+		if (save_f(p, sockfd) == 0) {
 			cout << "download successfully" << endl;
 		} 
 	} else {
@@ -64,64 +67,4 @@ int main(int argc, char** argv){
 
 	close(sockfd);
 	return 0;
-}
-
-/**
- * upload a file with full path 'file' to 'sockfd'
- */
-int snd_f(char file_path[], int sockfd)
-{
-	FILE* fp;
-	if ((fp = fopen(file_path,"rb")) == NULL) {
-		cout << "cannot open file" << endl;
-		return -1;
-	}
-	cout << "open file " << file_path << endl;	
-
-	int l = 0;
-	int sum_l = 0;
-	char buf[BUF_SIZE] = {0};
-	while (!feof(fp)) {
-		l = fread(buf, sizeof(char), sizeof(buf), fp);
-		sum_l += l;
-		ssize_t w_l = snd_buf(sockfd, buf, l);
-		if (w_l < 0) {
-			cout << "write file failed " << file_path << endl;
-			close(sockfd);
-			return -1;
-		}
-	}
-	cout << "uplaod size " << sum_l << endl;
-	//delete[] buf;	
-	fclose(fp);
-	return 0;
-}
-
-/**
- * download file named 'file_name' from a connected 'sockfd' fromserver.
- * file_name 
- */
-int save_f(char file_path[], int sockfd)
-{ 
-	char file_name[FILE_SIZE] = {0};
-    get_file_name(file_path, file_name);
-    string path = _PATH_;
-    path += file_name;
-    const char *p = path.c_str();
-    FILE* fp;
-    if ((fp = fopen(p, "a")) == NULL) {
-        cout << "cannot open file" << endl;
-        return -1;
-    }
-    int rd_l;
-    char *buf = new char[1500];
-    while ((rd_l = recv(sockfd, buf, sizeof(buf), 0)) > 0) {
-        int i_len = 0;
-        i_len += sizeof(int);
-        if (rd_l > 0)
-            fwrite(buf, sizeof(char), rd_l, fp);
-    }
-    fclose(fp);
-    return 0;
-
 }

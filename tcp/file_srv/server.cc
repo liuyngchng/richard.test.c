@@ -22,9 +22,9 @@
 using namespace std;
 
 // declaration.
-int save_f(char file_name[], int sockfd); 		//save stream in sockfd to file
-int snd_f(char file_name[],int sockfd);			//send file content to stream sockfd
-
+int save_f(const char file_path[], int sockfd); 		//save stream in sockfd to file
+int snd_f(const char file_path[], int sockfd);			//send file content to stream sockfd
+void get_file_name(const char path[], char name[]);
 
 int main(int argc, char** argv){
 	int sockfd, acceptfd;
@@ -70,13 +70,20 @@ int main(int argc, char** argv){
 	if (strcmp(cmd, "put") == 0) {
 		cout << "cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name 
+		char name[FILE_SIZE] = {0};
+		get_file_name(file_name, name); 
+		string path = _PATH_;
+		path += name;
+		const char *p = path.c_str();
 		cout << "uploading file " << file_name << endl;
-		if (save_f(file_name, acceptfd) == 0)		//receive stream and save to file
+		if (save_f(p, acceptfd) == 0)		//receive stream and save to file
 			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {
 		cout <<"cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name
-		if (snd_f(file_name, acceptfd) ==0) 		// write file content to stream
+		string path = _PATH_;
+		path += file_name;
+		if (snd_f(path.c_str(), acceptfd) ==0) 		// write file content to stream
 			cout << "send file " << _PATH_ << file_name << endl;
 	}
 	else{
@@ -85,61 +92,3 @@ int main(int argc, char** argv){
 	return 0;
 }
 
-/**
- * save file content from stream represented by sockfd
- * to file name file_name.
-**/
-int save_f(char file_path[], int sockfd)
-{
-	char file_name[FILE_SIZE] = {0};
-	get_file_name(file_path, file_name); 
-	string path = _PATH_;
-	path += file_name;
-	const char *p = path.c_str();
-	FILE* fp;
-	if ((fp = fopen(p, "a")) == NULL) {
-		cout << "cannot open file" << endl;
-		return -1;
-	}
-	int rd_l;
-	char *buf = new char[1500];
-	while ((rd_l = recv(sockfd, buf, sizeof(buf), 0)) > 0) {
-		int i_len = 0;
-		i_len += sizeof(int);
-		if (rd_l > 0)
-			fwrite(buf, sizeof(char), rd_l, fp);
-	}
-	fclose(fp);
-	return 0;
-}
-
-/**
- * send file stream to sockfd
- */
-int snd_f(char file_path[], int sockfd)
-{
-	FILE* fp;
-    if ((fp = fopen(file_path,"rb")) == NULL) {
-        cout << "cannot open file" << endl;
-        return -1;
-    }
-    cout << "open file " << file_path << endl;
-
-    int l = 0;
-    int sum_l = 0;
-    char buf[BUF_SIZE] = {0};
-    while (!feof(fp)) {
-        l = fread(buf, sizeof(char), sizeof(buf), fp);
-        sum_l += l;
-        ssize_t w_l = snd_buf(sockfd, buf, l);
-        if (w_l < 0) {
-            cout << "write file failed " << file_path << endl;
-            close(sockfd);
-            return -1;
-        }
-    }
-    cout << "uplaod size " << sum_l << endl;
-    fclose(fp);
-    return 0;
-
-}
