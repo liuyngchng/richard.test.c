@@ -52,14 +52,14 @@ int main(int argc, char** argv){
 		get_file_name(file, file_name);
 		snd_buf(sockfd, file_name, FILE_SIZE);				//send file name to server
 		if (upload(file, sockfd) == 0)
-			cout <<"upload successfully" << endl;;	
+			cout <<"upload successfully" << endl;	
 	} else if (strcmp(cmd, "get") == 0) {		//download a file from server	
 		snd_buf(sockfd, file,FILE_SIZE);				//send file name to server
 		if (download(file, sockfd) == 0) {
-			cout << "download successfully" << endl;;
+			cout << "download successfully" << endl;
 		} 
 	} else {
-		cout << "illegal operation" << endl;;
+		cout << "illegal operation" << endl;
 	}
 
 	close(sockfd);
@@ -71,38 +71,28 @@ int main(int argc, char** argv){
  */
 int upload(char file_path[], int sockfd)
 {
-	f_file myfile;
 	FILE* fp;
-	FILE* ppp;
-
 	if ((fp = fopen(file_path,"rb")) == NULL) {
-		cout << "cannot open file" << endl;;
+		cout << "cannot open file" << endl;
 		return -1;
 	}
-	cout << "open file ok " << file_path << endl;;	
+	cout << "open file " << file_path << endl;	
 
-	int length;
+	int l = 0;
+	int sum_l = 0;
+	char buf[BUF_SIZE] = {0};
 	while (!feof(fp)) {
-		length = fread(myfile.buf, sizeof(char), BUF_SIZE, fp);
-		myfile.size = length;
-		char *buff=new char[1500];
-		int i_len=0;
-
-		*(int*)(buff + i_len) = (int)htonl(myfile.size); //host to net long 
-		i_len += sizeof(int);
-		
-		memcpy(buff + i_len, myfile.buf, myfile.size);
-		i_len += sizeof(myfile.buf);
-
-		ssize_t writeLen = snd_buf(sockfd, buff, i_len);
-		if (writeLen < 0) {
-			cout << "write file failed " << file_path << endl;;
+		l = fread(buf, sizeof(char), sizeof(buf), fp);
+		sum_l += l;
+		ssize_t w_l = snd_buf(sockfd, buf, l);
+		if (w_l < 0) {
+			cout << "write file failed " << file_path << endl;
 			close(sockfd);
 			return -1;
 		}
-		delete[] buff;
 	}
-	
+	cout << "uplaod size " << sum_l << endl;
+	//delete[] buf;	
 	fclose(fp);
 	return 0;
 }

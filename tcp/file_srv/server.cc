@@ -71,12 +71,12 @@ int main(int argc, char** argv){
 		cout << "cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name 
 		cout << "uploading file " << file_name << endl;
-		if (save_f(file_name, acceptfd) == 0)	//receive stream and save to file
+		if (save_f(file_name, acceptfd) == 0)		//receive stream and save to file
 			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {
 		cout <<"cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name
-		if (snd_f(file_name, acceptfd) ==0) 	// write file content to stream
+		if (snd_f(file_name, acceptfd) ==0) 		// write file content to stream
 			cout << "send file " << _PATH_ << file_name << endl;
 	}
 	else{
@@ -91,32 +91,30 @@ int main(int argc, char** argv){
 **/
 int save_f(char file_name[], int acceptfd)
 {
-	char *rcv_msg = new char[1500];
-	int readLen;
-	FILE* fp;
-	f_file myfile; //f_file结构体，存放文件信息
-//	ofstream of("bbb.txt",ios::out|ios::app);
+	//f_file myfile; 
+	//ofstream of("bbb.txt",ios::out|ios::app);
 
-	char part_file[FILE_SIZE];
+	char part_file[FILE_SIZE] = {0};
 	get_file_name(file_name, part_file); 
 	string path = _PATH_;
 	path += part_file;
 	const char *p = path.c_str();
-	if ((fp=fopen(p, "a")) == NULL) {
+	FILE* fp;
+	if ((fp = fopen(p, "a")) == NULL) {
 		cout << "cannot open file" << endl;
 		return -1;
 	}
+	int rd_l;
+	char *buf = new char[1500];
+	while ((rd_l = recv(acceptfd, buf, sizeof(buf), 0)) > 0) {
+		int i_len = 0;
+		//memcpy(&myfile.size, buf + i_len, sizeof(int));
+		//myfile.size = (int)ntohl(myfile.size);
+		i_len += sizeof(int);
 
-	while ((readLen = recv(acceptfd, rcv_msg, sizeof(f_file), 0)) > 0) {
-		//f_file结构体操作，将客户端发来的结构体信息录入
-		int iLen = 0;
-		memcpy(&myfile.size, rcv_msg + iLen, sizeof(int));
-		myfile.size = (int)ntohl(myfile.size);
-		iLen += sizeof(int);
-
-		memcpy(&myfile.buf, rcv_msg + iLen, myfile.size);
-		if (myfile.size > 0)
-			fwrite(myfile.buf, sizeof(char), BUF_SIZE, fp);
+		//memcpy(&myfile.buf, buf + i_len, myfile.size);
+		if (rd_l > 0)
+			fwrite(buf, sizeof(char), rd_l, fp);
 	}
 	fclose(fp);
 	return 0;
@@ -143,13 +141,13 @@ int snd_f(char file_name[], int acceptfd)
 
 		myfile.size = length;
 		char *buffer = new char[1500];
-		int iLen = 0;
+		int i_len = 0;
 		
-		*(int*)(buffer + iLen) = htonl(myfile.size);
-		iLen += sizeof(int);
-		memcpy(buffer+iLen, myfile.buf, sizeof(myfile.buf));
-		iLen += sizeof(myfile.buf);
-		ssize_t writeLen = snd_buf(acceptfd, buffer, iLen);	
+		*(int*)(buffer + i_len) = htonl(myfile.size);
+		i_len += sizeof(int);
+		memcpy(buffer+i_len, myfile.buf, sizeof(myfile.buf));
+		i_len += sizeof(myfile.buf);
+		ssize_t writeLen = snd_buf(acceptfd, buffer, i_len);	
 
 		if (writeLen < 0) {
 			cout << "write failed" << endl;

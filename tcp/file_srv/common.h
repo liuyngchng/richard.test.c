@@ -3,10 +3,10 @@
  **/
 #include<iostream>
 #pragma pack(1) 		 		//单字节对齐
-#define BUF_SIZE 1024 			//每次读取文件内容的大小 
-#define NAME_SIZE 128 			//文件名大小 
-#define CMD_SIZE 20 			//输入的操作的数组的大小 
-#define FILE_SIZE 128 			//文件完整路径名的大小 
+#define BUF_SIZE 1024
+#define NAME_SIZE 128 
+#define CMD_SIZE 20 
+#define FILE_SIZE 128 
 
 using namespace std;
 
@@ -24,14 +24,14 @@ struct f_file
  **/
 int snd_buf(int i_sockfd, char* buf, size_t t_len)
 { 
-	int i_this_snd; 			//一次发送了多少数据 
-	unsigned int i_snd = 0;		//已经发送了多少 
+	int i_this_snd;
+	unsigned int i_snd = 0;
 	if (t_len == 0)
 		return 0;
 	while (i_snd < t_len) {
 		do {
 			i_this_snd = send(i_sockfd, buf, t_len - i_snd, 0);
-		} while ((i_this_snd < 0) && (errno == EINTR));		//发送的时候遇到了中断 
+		} while ((i_this_snd < 0) && (errno == EINTR)); 
 		if (i_this_snd < 0)
 			return i_snd;
 		i_snd += i_this_snd;
