@@ -64,15 +64,15 @@ int main(int argc, char** argv){
 	}
 	cout << "accept ok" << endl;
 	
-	char cmd[CMD_SIZE];								//save cmd：get || put 
-	char file_name[FILE_SIZE];						//file_name from client 
+	char cmd[CMD_SIZE] = {0};						//save cmd：get || put 
+	char file_name[FILE_SIZE] = {0};				//file_name from client 
 	rcv_buf(acceptfd, cmd, CMD_SIZE);				//receive cmd
 	if (strcmp(cmd, "put") == 0) {
 		cout << "cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name 
 		cout << "uploading file " << file_name << endl;
 		if (save_f(file_name, acceptfd) == 0)	//receive stream and save to file
-			cout <<"get file successfully!" << endl;
+			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {
 		cout <<"cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name

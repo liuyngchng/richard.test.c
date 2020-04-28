@@ -65,26 +65,26 @@ int rcv_buf(int i_sockfd, char* buf, size_t t_len)
 /**
  * get filename from file full path
 **/
-void get_file_name(char path[], char name[]) 
+void get_file_name(char path[], char name[])
 {
-	int i = 0;
-	for ( ; i < strlen(path) - 1 ; i++) {
-		if ((path[i] == '/' && path[i+1] != '/') 
-			|| (path[i] == '\\' && path[i+1] != '\\'))
-			break;
-		else 
-			name[i] = path[i];
-	}
-	if (i == strlen(path) - 1) {
-		name[i] = path[i];
-		return;
-	}	
-	int t = ++i;
-	for ( ; i < strlen(path); i++) {
-		name[i-t] = path[i];
-		name[i+1] = '\0';
-	}
-	name[i]='\0';
-	cout << "file name "<< name << endl;
+	//cout << "path=" << path << endl;
+    int j = strlen(path)-1;
+    int i = j;
+    for ( ; i >= 0 ; i--) {
+        if (path[i] == '/' || path[i] == '\\')
+            break;
+        else
+            name[j-i] = path[i];
+    }
+    //cout << "temp=" << name << endl;
+    j = strlen(name)-1;
+    for (i = 0; i <= j/2; i++) {
+        char temp = name[i];
+        name[i] = name[j-i];
+        name[j-i] = temp;
+    }
+    name[j+2] = '\0';
+    cout << "get_file_name="<< name << endl;
 }
+
 

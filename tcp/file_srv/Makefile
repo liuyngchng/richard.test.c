@@ -8,5 +8,5 @@ server.o:server.cc common.h
 client.o:client.cc common.h
 	g++ -g -c client.cc
 clean:all
-	rm _* *.o
+	rm _* *.o *.out
 

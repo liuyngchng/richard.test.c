@@ -43,10 +43,10 @@ int main(int argc, char** argv){
 		return -1;
 	}
 	
-	char cmd[CMD_SIZE], file[FILE_SIZE], file_name[FILE_SIZE];
+	char cmd[CMD_SIZE]={0}, file[FILE_SIZE]={0}, file_name[FILE_SIZE]={0};
 	cout << "input your cmd:" << endl;
 	cin >> cmd >> file;
-  
+ 	cout <<"cmd=" << cmd << ";file=" << file << endl; 
 	snd_buf(sockfd, cmd, CMD_SIZE); 					//send cmd to server
 	if (strcmp(cmd, "put") == 0) {
 		get_file_name(file, file_name);
