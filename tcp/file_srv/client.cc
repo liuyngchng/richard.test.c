@@ -47,14 +47,14 @@ int main(int argc, char** argv){
 	cout << "input your cmd:" << endl;
 	cin >> cmd >> file;
  	cout <<"cmd=" << cmd << ";file=" << file << endl; 
-	snd_buf(sockfd, cmd, CMD_SIZE); 					//send cmd to server
+	snd_buf(sockfd, cmd, CMD_SIZE); 						//send cmd to server
 	if (strcmp(cmd, "put") == 0) {
 		get_file_name(file, file_name);
 		snd_buf(sockfd, file_name, FILE_SIZE);				//send file name to server
 		if (snd_f(file, sockfd) == 0)
 			cout <<"upload successfully" << endl;	
-	} else if (strcmp(cmd, "get") == 0) {		//download a file from server	
-		snd_buf(sockfd, file, FILE_SIZE);				//send file name to server
+	} else if (strcmp(cmd, "get") == 0) {					//download a file from server	
+		snd_buf(sockfd, file, FILE_SIZE);					//send file name to server
 		string path = _PATH_;
 		path += file;
 		const char *p = path.c_str();

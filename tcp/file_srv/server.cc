@@ -15,9 +15,9 @@
 #include<fstream>
 #include<iostream>
 #include"common.h"
-#define _PORT_ 8080									//default listing port
+#define _PORT_ 8080										//default listing port
 #define _BACL_LOG_ 10
-#define _PATH_ "/home/rd/test/srv/" 				//file path for server
+#define _PATH_ "/home/rd/test/srv/" 					//file path for server
 
 using namespace std;
 
@@ -64,26 +64,26 @@ int main(int argc, char** argv){
 	}
 	cout << "accept ok" << endl;
 	
-	char cmd[CMD_SIZE] = {0};						//save cmd：get || put 
-	char file_name[FILE_SIZE] = {0};				//file_name from client 
-	rcv_buf(acceptfd, cmd, CMD_SIZE);				//receive cmd
+	char cmd[CMD_SIZE] = {0};							//save cmd：get || put 
+	char file_name[FILE_SIZE] = {0};					//file_name from client 
+	rcv_buf(acceptfd, cmd, CMD_SIZE);					//receive cmd
 	if (strcmp(cmd, "put") == 0) {
 		cout << "cmd is " << cmd << endl;
-		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name 
+		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name 
 		char name[FILE_SIZE] = {0};
 		get_file_name(file_name, name); 
 		string path = _PATH_;
 		path += name;
 		const char *p = path.c_str();
 		cout << "uploading file " << file_name << endl;
-		if (save_f(p, acceptfd) == 0)		//receive stream and save to file
+		if (save_f(p, acceptfd) == 0)					//receive stream and save to file
 			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {
 		cout <<"cmd is " << cmd << endl;
-		rcv_buf(acceptfd, file_name, FILE_SIZE);	//receive file name
+		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name
 		string path = _PATH_;
 		path += file_name;
-		if (snd_f(path.c_str(), acceptfd) ==0) 		// write file content to stream
+		if (snd_f(path.c_str(), acceptfd) ==0) 			// write file content to stream
 			cout << "send file " << _PATH_ << file_name << endl;
 	}
 	else{
