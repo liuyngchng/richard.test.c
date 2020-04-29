@@ -1,23 +1,17 @@
 /**
  * some common structure and function used in client and server.
  **/
-#include<iostream>
-#pragma pack(1) 		 		//单字节对齐
-#define BUF_SIZE 1024
-#define NAME_SIZE 128 
-#define CMD_SIZE 20 
-#define FILE_SIZE 128 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <iostream>
+#include <fstream>
+#include <string.h>
+#include <errno.h>
+#include "trans.h"
+#include <iomanip>
 
 using namespace std;
-
-/**
- * a file sturcture used to send and recieve file
- **/
-struct f_file
-{
-	int size;  					// current transport size
-	char buf[BUF_SIZE];  		// file content 
-}; 
 
 /**
  * send buf content limited by t_len to i_sockfd. 
@@ -105,7 +99,12 @@ int save_f(const char file_path[], int sockfd)
 		i_len += sizeof(int);
 		if (rd_l > 0)
 			fwrite(buf, sizeof(char), rd_l, fp);
+		//cout << "write " << i_len/(100 * pos) << "%" << endl;
 	}
+	fseek(fp, 0, SEEK_END);
+    long pos = ftell(fp);
+    cout << "t_f_size=" << pos << "; t_f=" << file_path << endl;
+    rewind(fp);
 	fclose(fp);
 	return 0;
 }
@@ -120,11 +119,15 @@ int snd_f(const char file_path[], int sockfd)
         cout << "cannot open file" << endl;
         return -1;
     }
-    cout << "open file " << file_path << endl;
-
+	fseek(fp, 0, SEEK_END);
+    long pos = ftell(fp);
+    cout << "s_f_size=" << pos << "; s_f=" << file_path << endl;
+    rewind(fp);
     int l = 0;
     int sum_l = 0;
     char buf[BUF_SIZE] = {0};
+	int _1MB = 1024 * 1024;
+	long pos_mb = pos/_1MB;
     while (!feof(fp)) {
         l = fread(buf, sizeof(char), sizeof(buf), fp);
         sum_l += l;
@@ -133,9 +136,13 @@ int snd_f(const char file_path[], int sockfd)
             cout << "write file failed " << file_path << endl;
             close(sockfd);
             return -1;
-        }
-    }
-    cout << "uplaod size " << sum_l << endl;
+		}
+		cout << "send " << fixed << setprecision(1) 
+			 << (float)sum_l/pos * 100 << "%" 
+			 << "(" << sum_l/_1MB << "MB/" << pos/_1MB << "MB)"
+			 << endl;
+	}
+    cout << "upload size " << sum_l << endl;
     fclose(fp);
     return 0;
 

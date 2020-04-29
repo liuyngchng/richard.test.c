@@ -2,19 +2,19 @@
  * a file server, user need to input command like
  * download test.txt or upload test.txt
  */
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<arpa/inet.h>
-#include<unistd.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<errno.h>
-#include<string>
-#include<fstream>
-#include<iostream>
-#include"common.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include "trans.h"
 #define _PORT_ 8080										//default listing port
 #define _BACL_LOG_ 10
 #define _PATH_ "/home/rd/test/srv/" 					//file path for server
@@ -75,7 +75,7 @@ int main(int argc, char** argv){
 		string path = _PATH_;
 		path += name;
 		const char *p = path.c_str();
-		cout << "uploading file " << file_name << endl;
+		cout << "receiving " << file_name << endl;
 		if (save_f(p, acceptfd) == 0)					//receive stream and save to file
 			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {
@@ -83,8 +83,9 @@ int main(int argc, char** argv){
 		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name
 		string path = _PATH_;
 		path += file_name;
+		cout << "sending " << file_name << endl;
 		if (snd_f(path.c_str(), acceptfd) ==0) 			// write file content to stream
-			cout << "send file " << _PATH_ << file_name << endl;
+			cout << "sent finish, " << _PATH_ << file_name << endl;
 	}
 	else{
 		cout <<"illegal operation" << endl;

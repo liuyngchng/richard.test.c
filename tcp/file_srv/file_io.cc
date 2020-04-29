@@ -1,6 +1,12 @@
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
+#include "trans.h"
+#include <iomanip>
+
+#ifndef BUF_SIZE
 #define BUF_SIZE 1500
+#endif
 
 using namespace std;
 
@@ -20,6 +26,18 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	
+	fseek(fp_s, 0, SEEK_END);
+	long pos = ftell(fp_s);
+	cout << "source_file_size=" << pos << "; source_file=" << file_path_s << endl;	
+	rewind(fp_s);
+	int len =100;
+	float f = (float)len / pos * 100;
+	cout << "percent is " << fixed << setprecision(2) << f << "%" << endl; 
+	len	= 196915200;
+	len /= 1024 * 1024;
+	pos = 1996488704;
+	pos /= 1024 * 1024;
+	cout << "percent in MB " << len << "MB/" << pos << endl << "MB";
 	int sum_l = 0;
 	int l = 0;
 	char buf[BUF_SIZE] = {0};
@@ -28,7 +46,17 @@ int main(int argc, char* argv[])
 		sum_l +=l;
 		fwrite(buf, sizeof(char), l, fp_t);
 	}
-	cout << sum_l << endl;
+	cout << "read_length=" << sum_l << endl;
+	fseek(fp_t, 0, SEEK_END);
+    pos = ftell(fp_t);
+    cout << "target_file_size=" << pos << "; target_file=" << file_path_t << endl;
+    rewind(fp_t);
 	fclose(fp_s);
 	fclose(fp_t);
+	char b[strlen(file_path_s) + 1] = {0};
+	bzero(b, sizeof(b));
+	cout << "path=" << file_path_s << endl;
+	get_file_name(file_path_s, b);
+	cout << "name=" << b << endl;
+
 }

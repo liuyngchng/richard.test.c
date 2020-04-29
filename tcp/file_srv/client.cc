@@ -1,16 +1,16 @@
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<arpa/inet.h>
-#include<unistd.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<errno.h>
-#include<string>
-#include<iostream>
-#include<fstream>
-#include"common.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <string>
+#include <iostream>
+#include <fstream>
+#include "trans.h"
 
 #define _PORT_ 	8080							//server port
 #define _IP_ 	"127.0.0.1"						//server IP
@@ -51,15 +51,17 @@ int main(int argc, char** argv){
 	if (strcmp(cmd, "put") == 0) {
 		get_file_name(file, file_name);
 		snd_buf(sockfd, file_name, FILE_SIZE);				//send file name to server
+		cout << "sending " << file_name << endl;
 		if (snd_f(file, sockfd) == 0)
-			cout <<"upload successfully" << endl;	
+			cout <<"upload success." << endl;	
 	} else if (strcmp(cmd, "get") == 0) {					//download a file from server	
 		snd_buf(sockfd, file, FILE_SIZE);					//send file name to server
 		string path = _PATH_;
 		path += file;
 		const char *p = path.c_str();
+		cout << "downloading " << p << endl;
 		if (save_f(p, sockfd) == 0) {
-			cout << "download successfully" << endl;
+			cout << "download success." << endl;
 		} 
 	} else {
 		cout << "illegal operation" << endl;
