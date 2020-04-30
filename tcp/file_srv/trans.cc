@@ -147,3 +147,17 @@ int snd_f(const char file_path[], int sockfd)
     return 0;
 
 }
+
+long get_file_size(const char file_path[])
+{
+	FILE* fp;
+    if ((fp = fopen(file_path,"rb")) == NULL) {
+        cout << "cannot open file" << endl;
+        return -1;
+    }
+    fseek(fp, 0, SEEK_END);
+    long pos = ftell(fp);
+    rewind(fp);
+	fclose(fp);
+	return pos;
+}

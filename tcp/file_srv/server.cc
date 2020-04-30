@@ -66,10 +66,12 @@ int main(int argc, char** argv){
 	
 	char cmd[CMD_SIZE] = {0};							//save cmd：get || put 
 	char file_name[FILE_SIZE] = {0};					//file_name from client 
+	long file_size = 0;
 	rcv_buf(acceptfd, cmd, CMD_SIZE);					//receive cmd
 	if (strcmp(cmd, "put") == 0) {
 		cout << "cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name 
+		rcv_buf(acceptfd, file_size, sizeof(long));
 		char name[FILE_SIZE] = {0};
 		get_file_name(file_name, name); 
 		string path = _PATH_;

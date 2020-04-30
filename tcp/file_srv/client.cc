@@ -51,6 +51,7 @@ int main(int argc, char** argv){
 	if (strcmp(cmd, "put") == 0) {
 		get_file_name(file, file_name);
 		snd_buf(sockfd, file_name, FILE_SIZE);				//send file name to server
+		snd_buf(sockfd, get_file_size(file_name), sizeof(long)); 
 		cout << "sending " << file_name << endl;
 		if (snd_f(file, sockfd) == 0)
 			cout <<"upload success." << endl;	

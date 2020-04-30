@@ -55,3 +55,8 @@ int save_f(const char file_path[], int sockfd);
  * send file stream to sockfd
  */
 int snd_f(const char file_path[], int sockfd);
+
+/**
+ * get file size in byte from file full path.
+ */
+long get_file_size(const char file_path[]);
