@@ -22,8 +22,8 @@
 using namespace std;
 
 // declaration.
-int save_f(const char file_path[], int sockfd); 		//save stream in sockfd to file
-int snd_f(const char file_path[], int sockfd);			//send file content to stream sockfd
+int save_f(const char path[], const int size, int sockfd); //save stream in sockfd to file
+int snd_f(const char path[], int sockfd);				//send file content to stream sockfd
 void get_file_name(const char path[], char name[]);
 
 int main(int argc, char** argv){
@@ -66,25 +66,32 @@ int main(int argc, char** argv){
 	
 	char cmd[CMD_SIZE] = {0};							//save cmd：get || put 
 	char file_name[FILE_SIZE] = {0};					//file_name from client 
-	long file_size = 0;
+	char file_size[FILE_SIZE] = {0};
 	rcv_buf(acceptfd, cmd, CMD_SIZE);					//receive cmd
+	int i_f_size = 0;									//receive file size
 	if (strcmp(cmd, "put") == 0) {
 		cout << "cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name 
-		rcv_buf(acceptfd, file_size, sizeof(long));
+		rcv_buf(acceptfd, file_size, FILE_SIZE);		//receive file size
+		cout << "file_size_str=" << file_size << endl;
+		i_f_size = atoi(file_size);
 		char name[FILE_SIZE] = {0};
 		get_file_name(file_name, name); 
 		string path = _PATH_;
 		path += name;
 		const char *p = path.c_str();
 		cout << "receiving " << file_name << endl;
-		if (save_f(p, acceptfd) == 0)					//receive stream and save to file
+		if (save_f(p, i_f_size, acceptfd) == 0)			//receive stream and save to file
 			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {
 		cout <<"cmd is " << cmd << endl;
 		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name
 		string path = _PATH_;
 		path += file_name;
+		i_f_size = get_file_size(path.c_str());
+		itoa(i_f_size, file_size);
+        cout << "file_size_str=" << file_size << endl;
+		snd_buf(acceptfd, file_size, FILE_SIZE);		//send file size
 		cout << "sending " << file_name << endl;
 		if (snd_f(path.c_str(), acceptfd) ==0) 			// write file content to stream
 			cout << "sent finish, " << _PATH_ << file_name << endl;

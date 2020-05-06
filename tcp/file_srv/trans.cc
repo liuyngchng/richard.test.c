@@ -85,25 +85,31 @@ void get_file_name(const char path[], char name[])
  * save file content from stream represented by sockfd
  * to file name file_name.
 **/
-int save_f(const char file_path[], int sockfd)
+int save_f(const char path[], const int size, int sockfd)
 {
 	FILE* fp;
-	if ((fp = fopen(file_path, "a")) == NULL) {
-		cout << "cannot open file" << endl;
+	if ((fp = fopen(path, "a")) == NULL) {
+		cout << "cannot open file: " << path << endl;
 		return -1;
 	}
 	int rd_l;
 	char *buf = new char[1500];
+	int _1MB = 1024 * 1024;
+	long sz_mb = size/_1MB;
+	int sum_l = 0;
 	while ((rd_l = recv(sockfd, buf, sizeof(buf), 0)) > 0) {
-		int i_len = 0;
-		i_len += sizeof(int);
+		sum_l += rd_l;
 		if (rd_l > 0)
 			fwrite(buf, sizeof(char), rd_l, fp);
-		//cout << "write " << i_len/(100 * pos) << "%" << endl;
+		if (size > 0)
+			cout << "saved " << fixed << setprecision(1)
+				 << (float)sum_l/size * 100 << "%" 
+				 << "(" << sum_l/_1MB << "MB/"<< sz_mb << "MB)" 
+				 << endl;
 	}
 	fseek(fp, 0, SEEK_END);
     long pos = ftell(fp);
-    cout << "t_f_size=" << pos << "; t_f=" << file_path << endl;
+    cout << "t_f_size=" << pos << "; t_f=" << path << endl;
     rewind(fp);
 	fclose(fp);
 	return 0;
@@ -112,34 +118,34 @@ int save_f(const char file_path[], int sockfd)
 /**
  * send file stream to sockfd
  */
-int snd_f(const char file_path[], int sockfd)
+int snd_f(const char path[], int sockfd)
 {
 	FILE* fp;
-    if ((fp = fopen(file_path,"rb")) == NULL) {
-        cout << "cannot open file" << endl;
+    if ((fp = fopen(path,"rb")) == NULL) {
+        cout << "cannot open file: " << path << endl;
         return -1;
     }
 	fseek(fp, 0, SEEK_END);
-    long pos = ftell(fp);
-    cout << "s_f_size=" << pos << "; s_f=" << file_path << endl;
+    long size = ftell(fp);
+    cout << "s_f_size=" << size << "; s_f=" << path << endl;
     rewind(fp);
     int l = 0;
     int sum_l = 0;
     char buf[BUF_SIZE] = {0};
 	int _1MB = 1024 * 1024;
-	long pos_mb = pos/_1MB;
+	long sz_mb = size/_1MB;
     while (!feof(fp)) {
         l = fread(buf, sizeof(char), sizeof(buf), fp);
         sum_l += l;
         ssize_t w_l = snd_buf(sockfd, buf, l);
         if (w_l < 0) {
-            cout << "write file failed " << file_path << endl;
+            cout << "write file failed " << path << endl;
             close(sockfd);
             return -1;
 		}
-		cout << "send " << fixed << setprecision(1) 
-			 << (float)sum_l/pos * 100 << "%" 
-			 << "(" << sum_l/_1MB << "MB/" << pos/_1MB << "MB)"
+		cout << "sent " << fixed << setprecision(1) 
+			 << (float)sum_l/size * 100 << "%" 
+			 << "(" << sum_l/_1MB << "MB/" << sz_mb << "MB)"
 			 << endl;
 	}
     cout << "upload size " << sum_l << endl;
@@ -148,16 +154,40 @@ int snd_f(const char file_path[], int sockfd)
 
 }
 
-long get_file_size(const char file_path[])
+int get_file_size(const char path[])
 {
 	FILE* fp;
-    if ((fp = fopen(file_path,"rb")) == NULL) {
-        cout << "cannot open file" << endl;
+    if ((fp = fopen(path,"rb")) == NULL) {
+        cout << "cannot open file: " << path << endl;
         return -1;
     }
     fseek(fp, 0, SEEK_END);
     long pos = ftell(fp);
     rewind(fp);
 	fclose(fp);
-	return pos;
+	return (int)pos;
+}
+
+/**
+ * convert a integer to a char array.
+ */
+void itoa (int n, char s[])
+{
+    int i, sign;
+    if ((sign = n) < 0)
+        n=-n;
+    i = 0;
+    do {
+        s[i++] = n%10 + '0';
+    } while ((n/=10) > 0);
+    if(sign < 0)
+        s[i++] = '-';
+    s[i] ='\0';
+    int l = strlen(s);
+    printf("itoa_s=%s, l_s=%d", s, l);
+    for(int j=0; j < l/2; j++) {
+        char t = s[j];
+        s[j] = s[l-1-j];
+        s[l-1-j] = t;
+    }
 }

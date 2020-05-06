@@ -19,13 +19,13 @@
 using namespace std;
 
 // get file name from full path.
-void get_file_name(const char full_path[], char file_name[]);
+void get_file_name(const char path[], char file_name[]);
 
 // write file stream named file(file full path) to sockfd 
-int snd_f(const char file[], int sockfd); 
+int snd_f(const char path[], int sockfd); 
 
 // read file stream from sockfd sockfd and write to file named file
-int save_f(const char file[], int sockfd); 
+int save_f(const char path[], const int size, int sockfd); 
 
 int main(int argc, char** argv){
 	int cLen = 0;
@@ -43,15 +43,20 @@ int main(int argc, char** argv){
 		return -1;
 	}
 	
-	char cmd[CMD_SIZE]={0}, file[FILE_SIZE]={0}, file_name[FILE_SIZE]={0};
+	char cmd[CMD_SIZE] = {0}, file[FILE_SIZE] = {0}, file_name[FILE_SIZE] = {0}, file_size[FILE_SIZE] = {0};
 	cout << "input your cmd:" << endl;
 	cin >> cmd >> file;
- 	cout <<"cmd=" << cmd << ";file=" << file << endl; 
+ 	cout <<"cmd = " << cmd << ";file = " << file << endl; 
 	snd_buf(sockfd, cmd, CMD_SIZE); 						//send cmd to server
+	int i_f_size = 0;
 	if (strcmp(cmd, "put") == 0) {
 		get_file_name(file, file_name);
 		snd_buf(sockfd, file_name, FILE_SIZE);				//send file name to server
-		snd_buf(sockfd, get_file_size(file_name), sizeof(long)); 
+		cout << "sent file_name " << file_name << endl;
+		i_f_size = get_file_size(file);
+		itoa(i_f_size, file_size);
+		cout << "file_size_str=" << file_size << endl;
+		snd_buf(sockfd, file_size, FILE_SIZE); 
 		cout << "sending " << file_name << endl;
 		if (snd_f(file, sockfd) == 0)
 			cout <<"upload success." << endl;	
@@ -60,8 +65,11 @@ int main(int argc, char** argv){
 		string path = _PATH_;
 		path += file;
 		const char *p = path.c_str();
-		cout << "downloading " << p << endl;
-		if (save_f(p, sockfd) == 0) {
+		//cout << "downloading " << p << endl;
+		rcv_buf(sockfd, file_size, FILE_SIZE);        		//receive file size
+		cout << "file_size_str=" << file_size << endl;
+		i_f_size = atoi(file_size);
+		if (save_f(p, i_f_size, sockfd) == 0) {
 			cout << "download success." << endl;
 		} 
 	} else {

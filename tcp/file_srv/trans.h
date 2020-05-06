@@ -46,17 +46,22 @@ int rcv_buf(int i_sockfd, char* buf, size_t t_len);
 void get_file_name(const char path[], char name[]);
 
 /**
- * save file content from stream represented by sockfd
+ * save file content from stream represented by sockfd with stream length as size
  * to file name file_name.
 **/
-int save_f(const char file_path[], int sockfd);
+int save_f(const char path[], const int size, int sockfd);
 
 /**
  * send file stream to sockfd
  */
-int snd_f(const char file_path[], int sockfd);
+int snd_f(const char path[], int sockfd);
 
 /**
  * get file size in byte from file full path.
  */
-long get_file_size(const char file_path[]);
+int get_file_size(const char path[]);
+
+/**
+ * convert a integer to a char array.
+ */
+void itoa (int n, char s[]);
