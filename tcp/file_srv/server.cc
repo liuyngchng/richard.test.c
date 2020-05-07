@@ -17,7 +17,7 @@
 #include "trans.h"
 #define _PORT_ 8080										//default listing port
 #define _BACL_LOG_ 10
-#define _PATH_ "/home/rd/test/srv/" 					//file path for server
+#define _PATH_ "/home/rd/test/srv/"						//file path for server
 
 using namespace std;
 
@@ -90,10 +90,10 @@ int main(int argc, char** argv){
 		path += file_name;
 		i_f_size = get_file_size(path.c_str());
 		itoa(i_f_size, file_size);
-        cout << "file_size_str=" << file_size << endl;
+		cout << "file_size_str=" << file_size << endl;
 		snd_buf(acceptfd, file_size, FILE_SIZE);		//send file size
 		cout << "sending " << file_name << endl;
-		if (snd_f(path.c_str(), acceptfd) ==0) 			// write file content to stream
+		if (snd_f(path.c_str(), acceptfd) ==0)			// write file content to stream
 			cout << "sent finish, " << _PATH_ << file_name << endl;
 	}
 	else{

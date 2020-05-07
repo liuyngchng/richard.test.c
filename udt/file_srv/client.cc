@@ -12,9 +12,9 @@
 #include <fstream>
 #include "trans.h"
 
-#define _PORT_ 	9000							//server port
-#define _IP_ 	"127.0.0.1"						//server IP
-#define _PATH_ 	"/home/rd/test/cli/"			//client download defalt path
+#define _PORT_	9000							//server port
+#define _IP_	"127.0.0.1"						//server IP
+#define _PATH_	"/home/rd/test/cli/"			//client download defalt path
 
 using namespace std;
 
@@ -45,8 +45,8 @@ int main(int argc, char** argv){
 	char cmd[CMD_SIZE] = {0}, file[FILE_SIZE] = {0}, file_name[FILE_SIZE] = {0}, file_size[FILE_SIZE] = {0};
 	cout << "input your cmd:" << endl;
 	cin >> cmd >> file;
- 	cout <<"cmd = " << cmd << ";file = " << file << endl; 
-	snd_buf(sockfd, cmd, CMD_SIZE); 						//send cmd to server
+	cout <<"cmd = " << cmd << ";file = " << file << endl; 
+	snd_buf(sockfd, cmd, CMD_SIZE);							//send cmd to server
 	int i_f_size = 0;
 	if (strcmp(cmd, "put") == 0) {
 		get_file_name(file, file_name);
@@ -65,7 +65,7 @@ int main(int argc, char** argv){
 		path += file;
 		const char *p = path.c_str();
 		//cout << "downloading " << p << endl;
-		rcv_buf(sockfd, file_size, FILE_SIZE);        		//receive file size
+		rcv_buf(sockfd, file_size, FILE_SIZE);				//receive file size
 		cout << "file_size_str=" << file_size << endl;
 		i_f_size = atoi(file_size);
 		if (save_f(p, i_f_size, sockfd) == 0) {
