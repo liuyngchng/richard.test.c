@@ -184,7 +184,7 @@ void itoa (int n, char s[])
         s[i++] = '-';
     s[i] ='\0';
     int l = strlen(s);
-    printf("itoa_s=%s, l_s=%d", s, l);
+    //printf("itoa_s=%s, l_s=%d", s, l);
     for(int j=0; j < l/2; j++) {
         char t = s[j];
         s[j] = s[l-1-j];
