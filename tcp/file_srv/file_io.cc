@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void get_file_name(const char path[], char name[])
+void _get_file_name(const char path[], char name[])
 {
     //cout << "path=" << path << endl;
     int j = strlen(path)-1;
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 	char b[strlen(file_path_s) + 1] = {0};
 	bzero(b, sizeof(b));
 	cout << "path=" << file_path_s << endl;
-	get_file_name(file_path_s, b);
+	_get_file_name(file_path_s, b);
 	cout << "name=" << b << endl;
 
 }
