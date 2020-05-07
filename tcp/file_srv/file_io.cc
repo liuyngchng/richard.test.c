@@ -10,6 +10,28 @@
 
 using namespace std;
 
+void get_file_name(const char path[], char name[])
+{
+    //cout << "path=" << path << endl;
+    int j = strlen(path)-1;
+    int i = j;
+    for ( ; i >= 0 ; i--) {
+        if (path[i] == '/' || path[i] == '\\')
+            break;
+        else
+            name[j-i] = path[i];
+    }
+    //cout << "temp=" << name << endl;
+    j = strlen(name)-1;
+    for (i = 0; i <= j/2; i++) {
+        char temp = name[i];
+        name[i] = name[j-i];
+        name[j-i] = temp;
+    }
+    name[j+2] = '\0';
+    cout << "get_file_name="<< name << endl;
+}
+
 int main(int argc, char* argv[])
 {
 	char file_path_s[] = "/home/rd/workspace/richard.test.c/tcp/file_srv/client.o";
