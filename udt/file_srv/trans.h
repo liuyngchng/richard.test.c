@@ -4,7 +4,7 @@
 #pragma pack(1) 		 		//单字节对齐
 
 #ifndef BUF_SIZE
-#define BUF_SIZE 1024
+#define BUF_SIZE 8096 
 #endif
 
 #ifndef NAME_SIZE

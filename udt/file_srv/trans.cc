@@ -97,7 +97,7 @@ int save_f(const char path[], const int size, UDTSOCKET sockfd)
 	int _1MB = 1024 * 1024;
 	long sz_mb = size/_1MB;
 	int sum_l = 0;
-	while(1) {
+	while(sum_l < size) {
 		rd_l = UDT::recv(sockfd, buf, sizeof(buf), 0);
 		if (rd_l == UDT::ERROR) {
 			cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
