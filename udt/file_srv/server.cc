@@ -80,7 +80,7 @@ int main(int argc, char** argv){
 		string path = _PATH_;
 		path += name;
 		const char *p = path.c_str();
-		cout << "receiving " << file_name << endl;
+		cout << "receiving file:" << file_name << endl;
 		if (save_f(p, i_f_size, acceptfd) == 0)			//receive stream and save to file
 			cout <<"saved " << _PATH_ << file_name << endl;
 	} else if (strcmp(cmd, "get") == 0) {

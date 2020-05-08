@@ -97,7 +97,12 @@ int save_f(const char path[], const int size, UDTSOCKET sockfd)
 	int _1MB = 1024 * 1024;
 	long sz_mb = size/_1MB;
 	int sum_l = 0;
-	while ((rd_l = recv(sockfd, buf, sizeof(buf), 0)) > 0) {
+	while(1) {
+		rd_l = UDT::recv(sockfd, buf, sizeof(buf), 0);
+		if (rd_l == UDT::ERROR) {
+			cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
+			break;
+		}
 		sum_l += rd_l;
 		if (rd_l > 0)
 			fwrite(buf, sizeof(char), rd_l, fp);
@@ -137,9 +142,10 @@ int snd_f(const char path[], UDTSOCKET sockfd)
 	while (!feof(fp)) {
 		l = fread(buf, sizeof(char), sizeof(buf), fp);
 		sum_l += l;
-		ssize_t w_l = snd_buf(sockfd, buf, l);
-		if (w_l < 0) {
-			cout << "write file failed " << path << endl;
+		int w_l = UDT::send(sockfd, buf, l, 0);
+		if (w_l == UDT::ERROR) {
+			cout << "send file failed " << path << ", error:" 
+				 << UDT::getlasterror().getErrorMessage() << endl;
 			close(sockfd);
 			return -1;
 		}
