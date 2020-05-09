@@ -4,7 +4,7 @@
 #pragma pack(1) 		 		//单字节对齐
 
 #ifndef BUF_SIZE
-#define BUF_SIZE 8096 
+#define BUF_SIZE 80960 
 #endif
 
 #ifndef NAME_SIZE
@@ -25,11 +25,11 @@ using namespace std;
 /**
  * a file sturcture used to send and recieve file
  **/
-struct f_file
-{
-	int size;  					// current transport size
-	char buf[BUF_SIZE];  		// file content 
-}; 
+//struct f_file
+//{
+//	int size;  					// current transport size
+//	char buf[BUF_SIZE];  		// file content 
+//}; 
 
 /**
  * send buf content limited by t_len to i_sockfd. 

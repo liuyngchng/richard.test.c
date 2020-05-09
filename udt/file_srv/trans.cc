@@ -93,7 +93,7 @@ int save_f(const char path[], const int size, UDTSOCKET sockfd)
 		return -1;
 	}
 	int rd_l;
-	char *buf = new char[1500];
+	char *buf = new char[BUF_SIZE];
 	int _1MB = 1024 * 1024;
 	long sz_mb = size/_1MB;
 	int sum_l = 0;
@@ -107,7 +107,7 @@ int save_f(const char path[], const int size, UDTSOCKET sockfd)
 		if (rd_l > 0)
 			fwrite(buf, sizeof(char), rd_l, fp);
 		if (size > 0)
-			cout << "saved " << fixed << setprecision(1)
+			cout << "recved " << fixed << setprecision(1)
 				 << (float)sum_l/size * 100 << "%" 
 				 << "(" << sum_l/_1MB << "MB/"<< sz_mb << "MB)" 
 				 << endl;
