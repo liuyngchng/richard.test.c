@@ -1,10 +1,10 @@
-all:tcp_server tcp_client mytime
+all:_server _client mytime
 mytime:mytime.cc
 	g++ -o ./libmytime.so -fPIC -shared mytime.cc
-tcp_server:tcp_server.cc mytime
-	g++ -o _tcp_server tcp_server.cc ./libmytime.so -lpthread
-tcp_client:tcp_client.cc mytime
-	g++ -o _tcp_client tcp_client.cc ./libmytime.so
+_server:server.cc mytime
+	g++ -o _server server.cc ./libmytime.so -lpthread
+_client:client.cc mytime
+	g++ -o _client client.cc ./libmytime.so
 clean:
 	rm -f _* *.o *.so
 	
