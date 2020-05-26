@@ -52,7 +52,7 @@ Context: 带宽 1Mbps， 丢包率 50%，网络延迟10ms, 持续测试5min
 
 ## 5.1 UDP
 
-| NO | Protocol | BW(Mbps) | delay(ms) | loss(%) |  Traffic(Mbps) |  Note |  
+| NO | Protocol | BW(Mbps) | delay(ms) | loss(%) |  Traffic(Kbps) |  Note |  
 | -- | -- | -- | -- | -- | -- | -- |  
 | 1 | UDP | 1 | 10 | 20 | 200 | 正常工作 |  
 | 2 | UDP | 1 | 10 | 30 | 120 | 正常工作 |
