@@ -11,7 +11,11 @@
 #include <iostream>
 #include <fstream>
 #include "trans.h"
+#include "md5.h"
 
+#define CB 0;		//appType
+#define DB 1;
+#define SS 2;
 /**
  * send file to server.
  */

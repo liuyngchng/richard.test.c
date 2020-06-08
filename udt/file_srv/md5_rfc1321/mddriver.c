@@ -23,11 +23,12 @@ documentation and/or software.
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include "md5_global.h"
+#include "global.h"
 #if MD == 2
 #include "md2.h"
 #endif
 #if MD == 4
+
 #include "md4.h"
 #endif
 #if MD == 5
@@ -74,14 +75,16 @@ Arguments (may be any combination):
   filename - digests file
   (none)   - digests standard input
  */
-int main (int argc, char* argv[])
+int main (argc, argv)
+int argc;
+char *argv[];
 {
   int i;
 
   if (argc > 1)
- for (i = 1; i < argc; i++) 
+ for (i = 1; i < argc; i++)
    if (argv[i][0] == '-' && argv[i][1] == 's')
-     MDString (argv[i] + 2); 
+     MDString (argv[i] + 2);
    else if (strcmp (argv[i], "-t") == 0)
      MDTimeTrial ();
    else if (strcmp (argv[i], "-x") == 0)
@@ -93,6 +96,7 @@ int main (int argc, char* argv[])
 
   return (0);
 }
+
 /* Digests a string and prints the result.
  */
 static void MDString (string)
@@ -221,4 +225,3 @@ unsigned char digest[16];
   for (i = 0; i < 16; i++)
  printf ("%02x", digest[i]);
 }
-
