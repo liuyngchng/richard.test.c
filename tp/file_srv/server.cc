@@ -76,7 +76,7 @@ int main(int argc, char** argv){
 		rcv_buf(acceptfd, file_size, FILE_SIZE);		//receive file size
 		cout << "file_size_str=" << file_size << endl;
 		rcv_buf(acceptfd, file_md5, 322);				//receive file md5
-		cout << "file_md5=" << file_md5 << endl;
+		cout << "file_md5=" << file_md5 << endl << flush;
 		return 0;
 		i_f_size = atoi(file_size);
 		char name[FILE_SIZE] = {0};

@@ -45,19 +45,19 @@ int send_file(char* path)
 {
 	UDTSOCKET sockfd = init();	
 	char cmd[CMD_SIZE] = "put", file_name[FILE_SIZE] = {0}, file_size[FILE_SIZE] = {0};
-	cout <<"send file:" << path << endl; 
+	cout <<"send file=" << path << endl; 
 	snd_buf(sockfd, cmd, CMD_SIZE);				//send cmd to server
 	int i_f_size = 0;
 	get_file_name(path, file_name);
 	snd_buf(sockfd, file_name, FILE_SIZE);		//send file name to server
-	cout << "sent file_name " << file_name << endl;
+	cout << "sent file_name=" << file_name << endl;
 	i_f_size = get_file_size(path);
 	itoa(i_f_size, file_size);
 	cout << "file_size_str=" << file_size << endl;
 	snd_buf(sockfd, file_size, FILE_SIZE);		//send file size to server
 	char md5[33] = {0};
 	get_file_md5(path, md5);
-	cout << "file_md5 =" << md5 << endl;
+	cout << "file_md5=" << md5 << endl;
 	snd_buf(sockfd, md5, strlen(md5));			//send file md5
 	//cout << "strlen(md5)=" << strlen(md5) << endl;	 
 	return -1;
