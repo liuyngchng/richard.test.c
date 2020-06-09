@@ -67,6 +67,7 @@ int main(int argc, char** argv){
 	char cmd[CMD_SIZE] = {0};							//save cmd：get || put 
 	char file_name[FILE_SIZE] = {0};					//file_name from client 
 	char file_size[FILE_SIZE] = {0};
+	char file_md5[33] = {0};							//file md5 from client
 	rcv_buf(acceptfd, cmd, CMD_SIZE);					//receive cmd
 	int i_f_size = 0;									//receive file size
 	if (strcmp(cmd, "put") == 0) {
@@ -74,6 +75,9 @@ int main(int argc, char** argv){
 		rcv_buf(acceptfd, file_name, FILE_SIZE);		//receive file name 
 		rcv_buf(acceptfd, file_size, FILE_SIZE);		//receive file size
 		cout << "file_size_str=" << file_size << endl;
+		rcv_buf(acceptfd, file_md5, 322);				//receive file md5
+		cout << "file_md5=" << file_md5 << endl;
+		return 0;
 		i_f_size = atoi(file_size);
 		char name[FILE_SIZE] = {0};
 		get_file_name(file_name, name); 

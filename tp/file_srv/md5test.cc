@@ -52,17 +52,17 @@ int main(int argc, char* argv[])
 		cout << filename << "can't be opened" << endl;
 		return -1;
 	}
-	md5_byte_t buffer[1024] = {0}, digest[16] = {0};
+	md5_byte_t buffer[1024*1024] = {0}, digest[16] = {0};
 	int len = 0;
-	while (len = fread (buffer, 1, 1024, file))
+	while (len = fread (buffer, 1, 1024*1024, file))
 		md5_append(&ms, buffer, len);
 	md5_finish(&ms, digest);   	
-	md5_print(digest);
+	//md5_print(digest);
 	char dest[33] = {0};
 	byte_to_hexstr(digest, dest, sizeof(digest));
-	cout << sizeof(dest) << endl;
-	printf("%s\n", dest);
-	cout << "result is"<< endl << dest << endl;	
+	//cout << sizeof(dest) << endl;
+	//printf("%s\n", dest);
+	cout << dest << endl;	
 	return 0;
 
 }

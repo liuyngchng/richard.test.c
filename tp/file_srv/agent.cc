@@ -58,7 +58,9 @@ int send_file(char* path)
 	char md5[33] = {0};
 	get_file_md5(path, md5);
 	cout << "file_md5 =" << md5 << endl;
-	snd_buf(sockfd, md5, strlen(md5));		//send file md5	 
+	snd_buf(sockfd, md5, strlen(md5));			//send file md5
+	//cout << "strlen(md5)=" << strlen(md5) << endl;	 
+	return -1;
 	cout << "sending " << file_name << endl;
 	if (snd_f(path, sockfd) == 0)
 		cout <<"upload success." << endl;	
@@ -151,9 +153,9 @@ int get_file_md5(const char *path, char *md5)
         cout << path << "can't be opened" << endl;
         return -1;
     }
-    md5_byte_t buffer[1024] = {0}, digest[16] = {0};
+    md5_byte_t buffer[1024*1024] = {0}, digest[16] = {0};
     int len = 0;
-    while (len = fread (buffer, 1, 1024, file))
+    while (len = fread (buffer, 1, 1024*1024, file))
         md5_append(&ms, buffer, len);
     md5_finish(&ms, digest);
     byte_to_hexstr(digest, md5, sizeof(digest));
