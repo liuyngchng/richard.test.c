@@ -39,6 +39,9 @@
 
 ## 14. 计算sizeof
 
+size of 属于Macro, function, 关键字 
+
+
 以下为Linux下的32位C程序，请计算sizeof的值。
 ```
     char str[] = “Hello” ; 
@@ -150,3 +153,69 @@ int binary_search(int* arr, int key, int n)
     return -1;
 }
 ```
+## 20. 位域
+
+“位域”( bit field）
+
+## 21.  智能指针（c++)
+
+## 22. static modifier 的含义
+
+## 23. char a[3] ='abc';
+
+## 24. C int, char, float, double, long 
+
+## 25. & 和 * 区别  
+
+&是alias必须初始化，指针需要走构造和析构
+
+## 26. ++a, a++ 在C和C++中的区别  
+
+C++中 a++有临时变量赋值的过程  
+
+## 27. IPC
+共享内存， signal, socket(unisocket, 普通socket)  
+
+## 28. inline function
+
+递归函数不能用递归， 长函数不能用递归
+
+## 29. 函数形参  （argument)
+
+少量形参放在寄存器 ，大量放寄存器
+
+## 30. 计算机组成原理
+
+内存、寄存器、Bus，CPU， 南北桥
+
+## 31. lock
+mutex-lock, share-lock(C中没有)  
+read-lock, write-lock, spin-lock(占锁占CPU）
+dead-lock  
+## 32. C 中的数据结构， list, array, hash, tree
+
+## 33. 算法
+quicksort, binary-search
+
+
+## 34. switch 中是否可以做范围的判断？
+
+C中可以
+switch a:
+	case 1 ... 9:
+		break; 
+
+## 35. 内存释放和分配  
+
+malloc free
+
+## 36. 网络
+
+TCP, socket, 端口 
+
+## 37. shell, op
+
+cat, grep, find, tail, head, ps, netstat, iostat, top, gdb(), find, 查看运行时内存泄漏, 
+
+
+## 38. Bigendian, Small edian
