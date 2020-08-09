@@ -66,7 +66,7 @@ int main(int argc, char** argv){
 	
 	char cmd[CMD_SIZE] = {0};							//save cmd：get || put 
 	char file_name[FILE_SIZE] = {0};					//file_name from client 
-	long file_size = 0;
+	char file_size[FILE_SIZE] = {0};
 	rcv_buf(acceptfd, cmd, CMD_SIZE);					//receive cmd
 	if (strcmp(cmd, "put") == 0) {
 		cout << "cmd is " << cmd << endl;
