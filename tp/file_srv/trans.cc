@@ -2,7 +2,7 @@
  * some common structure and function used in client and server.
  **/
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <udt.h>
 #include <unistd.h>
 #include <iostream>
 #include <fstream>
@@ -16,7 +16,7 @@ using namespace std;
 /**
  * send buf content limited by t_len to i_sockfd. 
  **/
-int snd_buf(int i_sockfd, char* buf, size_t t_len)
+int snd_buf(UDTSOCKET i_sockfd, char* buf, size_t t_len)
 { 
 	int i_this_snd;
 	unsigned int i_snd = 0;
@@ -24,7 +24,7 @@ int snd_buf(int i_sockfd, char* buf, size_t t_len)
 		return 0;
 	while (i_snd < t_len) {
 		do {
-			i_this_snd = send(i_sockfd, buf, t_len - i_snd, 0);
+			i_this_snd = UDT::send(i_sockfd, buf, sizeof(buf), 0);
 		} while ((i_this_snd < 0) && (errno == EINTR)); 
 		if (i_this_snd < 0)
 			return i_snd;
@@ -37,7 +37,7 @@ int snd_buf(int i_sockfd, char* buf, size_t t_len)
 /**
  * receive stream from i_sockfd to buf limited by t_len
  */
-int rcv_buf(int i_sockfd, char* buf, size_t t_len)
+int rcv_buf(UDTSOCKET i_sockfd, char* buf, size_t t_len)
 {
 	int i_this_rd;
 	unsigned int i_rd = 0;
@@ -45,7 +45,7 @@ int rcv_buf(int i_sockfd, char* buf, size_t t_len)
 		return 0;
 	while (i_rd < t_len) {
 		do {
-			i_this_rd = read(i_sockfd, buf, t_len - i_rd);
+			i_this_rd = UDT::recv(i_sockfd, buf, sizeof(buf), 0);
 		} while((i_this_rd < 0) && (errno == EINTR));
 		if (i_this_rd < 0)
 			return i_this_rd;
@@ -85,7 +85,7 @@ void get_file_name(const char path[], char name[])
  * save file content from stream represented by sockfd
  * to file name file_name.
 **/
-int save_f(const char path[], const int size, int sockfd)
+int save_f(const char path[], const int size, UDTSOCKET sockfd)
 {
 	FILE* fp;
 	if ((fp = fopen(path, "a")) == NULL) {
@@ -93,16 +93,21 @@ int save_f(const char path[], const int size, int sockfd)
 		return -1;
 	}
 	int rd_l;
-	char *buf = new char[1500];
+	char *buf = new char[BUF_SIZE];
 	int _1MB = 1024 * 1024;
 	long sz_mb = size/_1MB;
 	int sum_l = 0;
-	while ((rd_l = recv(sockfd, buf, sizeof(buf), 0)) > 0) {
+	while(sum_l < size) {
+		rd_l = UDT::recv(sockfd, buf, sizeof(buf), 0);
+		if (rd_l == UDT::ERROR) {
+			cout << "recv err:" << UDT::getlasterror().getErrorMessage() << endl;
+			break;
+		}
 		sum_l += rd_l;
 		if (rd_l > 0)
 			fwrite(buf, sizeof(char), rd_l, fp);
 		if (size > 0)
-			cout << "saved " << fixed << setprecision(1)
+			cout << "recved " << fixed << setprecision(1)
 				 << (float)sum_l/size * 100 << "%" 
 				 << "(" << sum_l/_1MB << "MB/"<< sz_mb << "MB)" 
 				 << endl;
@@ -118,7 +123,7 @@ int save_f(const char path[], const int size, int sockfd)
 /**
  * send file stream to sockfd
  */
-int snd_f(const char path[], int sockfd)
+int snd_f(const char path[], UDTSOCKET sockfd)
 {
 	FILE* fp;
 	if ((fp = fopen(path,"rb")) == NULL) {
@@ -137,9 +142,10 @@ int snd_f(const char path[], int sockfd)
 	while (!feof(fp)) {
 		l = fread(buf, sizeof(char), sizeof(buf), fp);
 		sum_l += l;
-		ssize_t w_l = snd_buf(sockfd, buf, l);
-		if (w_l < 0) {
-			cout << "write file failed " << path << endl;
+		int w_l = UDT::send(sockfd, buf, l, 0);
+		if (w_l == UDT::ERROR) {
+			cout << "send file failed " << path << ", error:" 
+				 << UDT::getlasterror().getErrorMessage() << endl;
 			close(sockfd);
 			return -1;
 		}

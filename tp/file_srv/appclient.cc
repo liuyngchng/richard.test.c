@@ -1,5 +1,8 @@
+/**
+ * a app client used to test server function.
+ */
 #include <sys/types.h>
-#include <sys/socket.h>
+#include <udt.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -11,9 +14,8 @@
 #include <iostream>
 #include <fstream>
 #include "trans.h"
-#include "itoa.h"
 
-#define _PORT_	8080							//server port
+#define _PORT_	9000							//server port
 #define _IP_	"127.0.0.1"						//server IP
 #define _PATH_	"/home/rd/test/cli/"			//client download defalt path
 
@@ -23,24 +25,23 @@ using namespace std;
 void get_file_name(const char path[], char file_name[]);
 
 // write file stream named file(file full path) to sockfd 
-int snd_f(const char path[], int sockfd); 
+int snd_f(const char path[], UDTSOCKET sockfd); 
 
 // read file stream from sockfd sockfd and write to file named file
-int save_f(const char path[], const int size, int sockfd); 
+int save_f(const char path[], const int size, UDTSOCKET sockfd); 
 
 int main(int argc, char** argv){
-	int cLen = 0;
 	struct sockaddr_in sock_addr;
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(_PORT_);
 	inet_pton(AF_INET, _IP_, &sock_addr.sin_addr);
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	UDTSOCKET sockfd = UDT::socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
 		cout << "socket fail" << endl;
 		return -1;
 	}
-	if (connect(sockfd, (struct sockaddr*)&sock_addr, sizeof(sock_addr)) < 0) {
-		cout << "connect error" << endl;
+	if (UDT::ERROR == UDT::connect(sockfd, (struct sockaddr*)&sock_addr, sizeof(sock_addr))) {
+		cout << "connect error" << UDT::getlasterror().getErrorMessage()<< endl;
 		return -1;
 	}
 	
