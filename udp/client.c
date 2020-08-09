@@ -5,7 +5,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include "lt_function.h"
-
+#define SESSION_NUM 1
 int main()
 {
 	int sockfd = socket(AF_INET,SOCK_DGRAM,0);
@@ -18,6 +18,7 @@ int main()
 		char buf[10];
 		scanf("%c", buf);
 		sendto(sockfd, &buf, sizeof(buf), 0, (struct sockaddr*)&addr, sizeof(addr));
+		//encodeAndSend(buf, strlen(buf), REDUNDANCY, sockfd, &addr, SESSION_NUM);
 		socklen_t len = sizeof(addr);
 		char resp[10];
 		recvfrom(sockfd, &resp, sizeof(resp), 0, (struct sockaddr*)&addr, &len);
