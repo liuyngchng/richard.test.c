@@ -20,12 +20,11 @@ int main()
 	}
 	struct sockaddr_in cli;
 	socklen_t len=sizeof(cli);
-
+	printf("recving...\n");
 	while(1) {
-		printf("recving...\n");
 		char buf[10];
 		recvfrom(sockfd, buf, sizeof(buf), 0, (struct sockaddr*)&cli, &len);
-		printf("recv %s\n", buf);
+		printf("%s", buf);
 		char resp[] = "OK";
 		sendto(sockfd, resp, sizeof(resp), 0, (struct sockaddr*)&cli, len);
 	}
