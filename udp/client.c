@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include "lt_function.h"
 
 int main()
 {

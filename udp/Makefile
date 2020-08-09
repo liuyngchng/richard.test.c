@@ -1,7 +1,7 @@
 all:_client _server
-_client:client.o
+_client:client.o lt_function.o
 	gcc -o $@ $^
-_server:server.o
+_server:server.o lt_function.o
 	gcc -o $@ $^
 %.o:%.c
 	gcc -o $@ -c $<
