@@ -17,7 +17,9 @@
 int main(int argc, char * argv[])
 {
 	if (argc != 3) {
-		printf("pls input rcvf server ip and port\n");
+		printf("usage:\t./cmd IP port\n");
+        printf("note:\t./cmd, executable file name\n\tIP, the host IP file will be sent to\n");
+        printf("\tport, the host port which be listend by a process.\n");
 		return -1;
 	}
 	

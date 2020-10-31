@@ -16,7 +16,7 @@
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
-		printf("pls input port\n");
+		printf("usage:./cmd port\n");
 		return -1;
 	}
 	
