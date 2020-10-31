@@ -15,9 +15,9 @@
 #include <fstream>
 #include <iostream>
 #include "trans.h"
-#define _PORT_ 8080										//default listing port
+//#define _PORT_ 8080					    //default listing port
 #define _BACL_LOG_ 10
-#define _PATH_ "/home/rd/test/srv/"						//file path for server
+#define _PATH_ "./"						//file path for server
 
 using namespace std;
 
@@ -27,6 +27,10 @@ int snd_f(const char path[], int sockfd);				//send file content to stream sockf
 void get_file_name(const char path[], char name[]);
 
 int main(int argc, char** argv){
+	if (argc < 2) {
+        cerr <<"usage: ./cmd port" << endl;
+        return 1;
+    }
 	int sockfd, acceptfd;
 	struct sockaddr_in my_addr;
 	struct sockaddr_in their_addr;
@@ -35,9 +39,9 @@ int main(int argc, char** argv){
 		cout << "socket error";
 		return -1;
 	}
-	cout << "socket ok" << endl;
+	cout << "create socket ok" << endl;
 	my_addr.sin_family = AF_INET;
-	my_addr.sin_port = htons(_PORT_);
+	my_addr.sin_port = htons(atoi(argv[1]));
 	my_addr.sin_addr.s_addr = INADDR_ANY;
 	bzero(&(my_addr.sin_zero), 0);
 	if ((bind(sockfd, (struct sockaddr*)&my_addr, 
@@ -45,7 +49,7 @@ int main(int argc, char** argv){
 		cout <<"bind error" << endl;
 		return -2;
 	}
-	cout << "bind ok" << endl;
+	cout << "bind socket ok" << endl;
 
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, 
 		(char*)&my_addr, sizeof(my_addr)); 
@@ -54,7 +58,8 @@ int main(int argc, char** argv){
 		perror("listen error");
 		return -3;
 	}
-	cout << "listen ok" << endl;
+	cout << "listen to port " << argv[1] << " ok" << endl;
+    cout << "default directory is " << _PATH_ << endl;
 	unsigned int sin_size = sizeof(my_addr);
 	acceptfd = accept(sockfd, (struct sockaddr*)&my_addr, &sin_size);
 	if (acceptfd < 0) {

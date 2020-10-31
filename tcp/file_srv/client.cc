@@ -13,8 +13,7 @@
 #include "trans.h"
 
 #define _PORT_	8080							//server port
-#define _IP_	"127.0.0.1"						//server IP
-#define _PATH_	"/home/rd/test/cli/"			//client download defalt path
+#define _PATH_	"./"			//client download defalt path
 
 using namespace std;
 
@@ -28,11 +27,21 @@ int snd_f(const char path[], int sockfd);
 int save_f(const char path[], const int size, int sockfd); 
 
 int main(int argc, char** argv){
+    int port = _PORT_;
+	if (argc < 2) {
+        cerr <<"usage: ./cmd IP port" << endl;
+        return 1;
+    }
+    if(argc >2){
+        port = atoi(argv[2]);    
+    }
+	cout << "peer will connect to " << argv[1] << ":" << port << endl;
+    cout << "default directory is " << _PATH_ << endl;
 	int cLen = 0;
 	struct sockaddr_in sock_addr;
 	sock_addr.sin_family = AF_INET;
-	sock_addr.sin_port = htons(_PORT_);
-	inet_pton(AF_INET, _IP_, &sock_addr.sin_addr);
+	sock_addr.sin_port = htons(port);
+	inet_pton(AF_INET, argv[1], &sock_addr.sin_addr);
 	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sockfd < 0) {
 		cout << "socket fail" << endl;
