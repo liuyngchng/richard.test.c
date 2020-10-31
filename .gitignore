@@ -6,4 +6,5 @@
 **/*.log
 **/_*
 **/core
+.DS_Store
 **/log.*

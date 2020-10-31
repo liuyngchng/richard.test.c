@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include "lt_function.h"
+#define SESSION_NUM 1
 
 int main()
 {
@@ -16,16 +18,16 @@ int main()
 	if (ret < 0 ) {
 		printf("bind error\n");
 		return -1;
-
 	}
 	struct sockaddr_in cli;
 	socklen_t len=sizeof(cli);
-
+	int insert_index = 0;
+	printf("recving...\n");
 	while(1) {
-		printf("recving...\n");
 		char buf[10];
 		recvfrom(sockfd, buf, sizeof(buf), 0, (struct sockaddr*)&cli, &len);
-		printf("recv %s\n", buf);
+		//receiveAndDecode(MAX_ROWNUM, buf, &SESSION_NUM, &insert_index,char*** matrix_message_decode,int*** matrix_    H_decode,int* success_recover_que,int* que_insert_pos);
+		printf("%s", buf);
 		char resp[] = "OK";
 		sendto(sockfd, resp, sizeof(resp), 0, (struct sockaddr*)&cli, len);
 	}

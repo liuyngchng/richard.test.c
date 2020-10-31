@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include "trans.h"
+#include "itoa.h"
 
 #define _PORT_	8080							//server port
 #define _PATH_	"./"			//client download defalt path
