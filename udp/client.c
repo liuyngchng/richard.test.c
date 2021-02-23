@@ -17,8 +17,8 @@ int main()
 	while (1) {
 		char buf[10];
 		scanf("%c", buf);
-		sendto(sockfd, &buf, sizeof(buf), 0, (struct sockaddr*)&addr, sizeof(addr));
-		//encodeAndSend(buf, strlen(buf), REDUNDANCY, sockfd, &addr, SESSION_NUM);
+		//sendto(sockfd, &buf, sizeof(buf), 0, (struct sockaddr*)&addr, sizeof(addr));
+		encodeAndSend(buf, strlen(buf), REDUNDANCY, sockfd, &addr, SESSION_NUM);
 		socklen_t len = sizeof(addr);
 		char resp[10];
 		recvfrom(sockfd, &resp, sizeof(resp), 0, (struct sockaddr*)&addr, &len);
