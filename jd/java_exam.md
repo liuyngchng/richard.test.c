@@ -123,6 +123,6 @@ volatile, 被锁对象，死锁，不加锁实现线程安全
 
 涉及对docker架构体系的理解
 
-# 32. 微服务、分布式服务相对于单体服务优缺点有那些？
+# 32. 微服务(microservices)、分布式服务(distributed application)相对于单体应用(monolith application)优缺点有那些？
 
 开放题目。
