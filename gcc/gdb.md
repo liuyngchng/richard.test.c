@@ -9,6 +9,7 @@ gcc -g main.c -o main
 gdb main        # start debug executable main
 break function  # set break point for a function
 run main        # start run executable main
+run args        # debug运行时提供控制台参数
 info locals     # view local variables
 p variable_name # print a variable value
 set args        # input console arguments for main(int argc ,char *[]args)
@@ -25,6 +26,7 @@ step        # step into
 ## 3.1 断点（BreakPoint）
 
 在代码的指定位置中断.设置断点的命令是break，它通常有如下方式：
+
 ```
 break <function>          # 在进入指定函数时停住
 break <linenum>           # 在指定行号停住。
@@ -32,13 +34,17 @@ break +/-offset           # 在当前行号的前面或后面的offset行
 break filename:linenum    # 在源文件filename的linenum行处
 break ... if <condition>  # ...可以是上述的参数，condition表示条件，在条件成立时停住。比如在循环境体中，可以设置break if i=100，表示当i为100时停住
 ```
+
 查看信息
+
 ```
 info breakpoints n        # 命令查看当前断点信息,
 delete                    # 删除所有断点
 delete breakpoint n       # 删除某个断点
 disable breakpoint n      # 禁用某个断点
 enable breakpoint n       # 使能某个断点
+save breakpoints bp       # 保存断点信息至文件
+gdb     xxxx -x  bp       # 调试时，加载文件中的断点信息
 ```
 
 ## 3.2 观察点（WatchPoint）
@@ -53,7 +59,14 @@ awatch <expr>     变量值被读或被写时中断
 
 可以通过info watchpoints [n]命令查看当前观察点信息
 
-## 3.3 捕捉点（CatchPoint）
+## 3.3 多线程
+
+```
+info thread     # 查看线程信息
+thread n        # 进入线程编号为n的线程，进行debug
+```
+
+## 3.4 捕捉点（CatchPoint）
 
 捕捉点用来补捉程序运行时的一些事件。如：载入共享库（动态链接库）、C++的异常等。通常也是用来定位bug。
 
