@@ -1,6 +1,6 @@
 # 1.get shared object
 ```
-gcc test_a.c test_b.c test_c.c -fPIC -shared -o libtest.so
+gcc a.c b.c c.c -fPIC -shared -o libtest.so
 ```
 # 2. link
  
