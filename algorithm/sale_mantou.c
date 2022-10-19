@@ -46,9 +46,9 @@ int main()
 }
 
 /**
- * sell mantou to earn your life, enjoy it.
+ * sale mantou to earn your life, enjoy it.
  */
-int sell_mantou()
+int sale_mantou()
 {
     int profit = 0;
     for (int i = 0; i < N; i++) {
