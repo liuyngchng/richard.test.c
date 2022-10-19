@@ -8,7 +8,7 @@
 #define M 10000             // number of mantou
 #define N 500               // number of package
 
-int sell_mantou();          // declare the function
+int sale_mantou();          // declare the function
     
 int p[M];                   // price of mantou   
 int c[N];                   // package capacity of mantou
@@ -41,7 +41,7 @@ int main()
     }
     
     // so how to sell mantou with or without package, to get the max profit?
-    int profit = sell_mantou();
+    int profit = sale_mantou();
     printf("my profit is %d, I am a smart business guy.\n", profit);
 }
 
